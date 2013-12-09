@@ -263,7 +263,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">ID</span>'+
-                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4">'+
+                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -277,7 +277,7 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">CC</span>'+
-                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc">'+
+                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -484,7 +484,7 @@ function pantalla_5(par_id,becerro){
                                         '<input name="bec_sexo" id="bec_sexo" type="radio" value="M" '+($.isArray(becerro)&&becerro[1]=='M'?'checked':'')+'>MACHO'+
                                     '</label>'+ 
                                     '<label name="lbl_bec_sexo" class="btn btn-default '+($.isArray(becerro)&&becerro[1]=='H'?'active':'')+'">'+
-                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='F'?'checked':'')+'>HEMBRA'+
+                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='H'?'checked':'')+'>HEMBRA'+
                                     '</label>'+
                                 '</div>'+ 
                             '</div>'+
@@ -537,7 +537,7 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">N°</span>'+
-                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="Caravana" value="'+($.isArray(becerro)?becerro[4]:'')+'">'+
+                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="Caravana" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Técnico</span>'+
@@ -579,15 +579,15 @@ function pantalla_6(bec_id,bec_caravana){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Cantidad</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="">'+
+                                '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Vigor</span>'+
                                 '<input id="cal_vigor" name="cal_vigor" type="text" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Paso al nacer</span>'+
-                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="Kg">'+
+                                '<span class="input-group-addon">Peso al nacer</span>'+
+                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="Kg" >'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Técnico</span>'+
@@ -946,6 +946,11 @@ function actualizar_aceptar(){
 
 function actualizar_cancelar(){
     $('#actualizar').animate({ bottom: '-40' }, 500);
+}
+
+function soloNumeros(e){
+    var key = window.Event ? e.which : e.keyCode
+    return (key >= 48 && key <= 57)
 }
 
 buscar_actualizaciones();

@@ -367,7 +367,8 @@ background-color: #771519;
 	z-index: 10;	
 	color: #fff;
 	text-align: center;
-	padding: 5px
+	padding: 5px;
+	display: none;
 }
 .error{
 	background-color: rgba(150,0,0,.9);
