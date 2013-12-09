@@ -193,7 +193,7 @@ function notificacion(texto,clase){
 function pantalla_2(){
     $('#cargando_app').show();
     var partos='';
-    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_becerros is null ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_becerros is null or par_becerros = 0 ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).par_fecha,current_date(),'minutes');
@@ -858,6 +858,7 @@ function marcar_becerro(bec_id,bec_caravana){
 function marcar_muerto(){
     if($('#bec_marcado').val()!=""){
         db.transaction(function(tx){tx.executeSql("update becerros set bec_muerto='S' where bec_id='"+$('#bec_marcado').val()+"'")});       
+        ultimo_movimiento();
         pantalla_7();
     }
 }

@@ -47,7 +47,8 @@
  
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var indicador = $("#progreso");
-var por_bbdd = 100;
+var por_bbdd_descarga = 50;
+var por_bbdd_subir = 50;
 
 function descargar_bbdd(){
     var tablas=Array(
@@ -94,7 +95,7 @@ function descargar_tablas(db,tablas,index){
                 );
             }
             else{
-                var ancho=por_bbdd/tablas.length*(indice+1);
+                var ancho=por_bbdd_subir + (por_bbdd_descarga/tablas.length*(indice+1));
                 indicador.css("width",ancho+"%");
                 if(indice==(total-1)){
                     $('#barra').removeClass("blue");
@@ -103,7 +104,7 @@ function descargar_tablas(db,tablas,index){
                     setTimeout(
                         function(){ location.replace('index.html'); },
                         1000
-                    );                    
+                    );                  
                 }
                 else{
                     descargar_tablas(db,tablas,(indice+1));
@@ -121,5 +122,44 @@ function descargar_tablas(db,tablas,index){
     });    
 }
 
-descargar_bbdd();
+function subir_bbdd(){
+    var tablas=Array(
+        "vacas",
+        "partos",
+        "becerros",
+        "calostro"
+    );
+    subir_tablas(db,tablas,0);
+}
+
+function subir_tablas(db,tablas,index){
+    var total=tablas.length;
+    var indice=index;
+    db.transaction(function(tx){tx.executeSql('select * from '+tablas[indice],[], function(tx, rs) {
+        if(rs.rows.length){
+            var registros = new Array();
+            for(i=0;i<rs.rows.length;i++){
+                registros[i]=rs.rows.item(i);
+            }
+            $.ajax({
+                url: 'http://www.mobile-promotive.com.ar/uniohio/datos.php',
+                type: 'POST',
+                data: {accion:'subir_datos',datos:registros,tabla:tablas[indice]},
+                success: function(data){
+                    var ancho=por_bbdd_subir/tablas.length*(indice+1);
+                    indicador.css("width",ancho+"%");
+                    db.transaction(function(tx){tx.executeSql('delete from '+tablas[indice])});                        
+                }
+            });
+        }
+        if(indice==(total-1)){
+            descargar_bbdd();
+        }
+        else{
+            subir_tablas(db,tablas,(indice+1));
+        }
+    })});
+}
+
+subir_bbdd();
 </script>
