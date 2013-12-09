@@ -104,7 +104,7 @@ function descargar_tablas(db,tablas,index){
                     setTimeout(
                         function(){ location.replace('index.html'); },
                         1000
-                    );                  
+                    );
                 }
                 else{
                     descargar_tablas(db,tablas,(indice+1));
@@ -135,29 +135,32 @@ function subir_bbdd(){
 function subir_tablas(db,tablas,index){
     var total=tablas.length;
     var indice=index;
+    registros=Array();
     db.transaction(function(tx){tx.executeSql('select * from '+tablas[indice],[], function(tx, rs) {
         if(rs.rows.length){
             var registros = new Array();
             for(i=0;i<rs.rows.length;i++){
                 registros[i]=rs.rows.item(i);
             }
-            $.ajax({
-                url: 'http://www.mobile-promotive.com.ar/uniohio/datos.php',
-                type: 'POST',
-                data: {accion:'subir_datos',datos:registros,tabla:tablas[indice]},
-                success: function(data){
-                    var ancho=por_bbdd_subir/tablas.length*(indice+1);
-                    indicador.css("width",ancho+"%");
-                    db.transaction(function(tx){tx.executeSql('delete from '+tablas[indice])});                        
+        }
+        $.ajax({
+            url: 'http://www.mobile-promotive.com.ar/uniohio/datos.php',
+            type: 'POST',
+            data: {accion:'subir_datos',datos:registros,tabla:tablas[indice]},
+            success: function(data){
+                var ancho=por_bbdd_subir/tablas.length*(indice+1);
+                indicador.css("width",ancho+"%");
+                db.transaction(function(tx){tx.executeSql('delete from '+tablas[indice])});                        
+            },
+            complete: function(){
+                if(indice==(total-1)){
+                    descargar_bbdd();
                 }
-            });
-        }
-        if(indice==(total-1)){
-            descargar_bbdd();
-        }
-        else{
-            subir_tablas(db,tablas,(indice+1));
-        }
+                else{
+                    subir_tablas(db,tablas,(indice+1));
+                }
+            }
+        });
     })});
 }
 

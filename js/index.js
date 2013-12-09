@@ -609,7 +609,7 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and bec_muerto is null and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and bec_muerto<>"S" and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
@@ -927,7 +927,7 @@ function buscar_actualizaciones(){
             actualizar();
         }
         else{
-          setTimeout(function(){buscar_actualizaciones();},100000);
+          setTimeout(function(){buscar_actualizaciones();},600000);
         }
       });
     })});
