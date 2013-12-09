@@ -927,7 +927,7 @@ function buscar_actualizaciones(){
             actualizar();
         }
         else{
-          setTimeout(function(){buscar_actualizaciones();},600000);
+          setTimeout(function(){buscar_actualizaciones();},100000);
         }
       });
     })});
