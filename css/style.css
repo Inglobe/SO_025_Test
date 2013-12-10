@@ -31,7 +31,13 @@ body {
 
 div.t_fixed_header.ui .body td {
 
-	line-height: 30px;
+	line-height: 35px;
+}
+
+.input-group-lg>.form-control{
+	font-size: 30px;
+
+
 }
 
 /*-------------First Screen----------------*/
@@ -377,7 +383,7 @@ background-color: #771519;
 
 #notificacion {
 	width: 100%;
-	height: 30px;
+	height: 50px;
 	position: fixed;
 	bottom: 0;
 	left: 0;

@@ -181,11 +181,11 @@ function notificacion(texto,clase){
     $('#notificacion').removeClass();
     $('#notificacion').addClass(clase);
     $('#notificacion').html(texto);
-    $('#notificacion').css('bottom','-40px');
+    $('#notificacion').css('bottom','-50px');
     $('#notificacion').show();
     $('#notificacion').animate({ bottom: '0' }, 300);
     setTimeout(function(){
-      $('#notificacion').animate({ bottom: '-40px' }, 300);
+      $('#notificacion').animate({ bottom: '-50px' }, 300);
     },3000)
 }
 
