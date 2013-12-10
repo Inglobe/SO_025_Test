@@ -34,7 +34,9 @@ body {
 .header_b{
 	font-size: 35px;
 }
-
+div.t_fixed_header.ui .body td:focus {
+	background-color: black;
+}
 /*-------------First Screen----------------*/
 .input-group-addon{
 	background-color: #07251c;
