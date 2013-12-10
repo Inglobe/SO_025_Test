@@ -58,7 +58,7 @@ var app = {
 
 /* Verificar si existe base de datos */
 function verificar_base(){
-  $('#cargando').fadeIn(300);
+  $('#cargando').show();
   if(!db){
     descargar_base_init();    
   }
@@ -153,7 +153,7 @@ function pantalla_login(){
             '<button id="login" type="button" onclick="login()" class="btn btn-primary btn-lg">Ingresar</button>'+
         '</div>';
     $('#app').html(html);
-    $('#cargando').fadeOut(300);
+    $('#cargando').hide();
 }
 
 /* Acceso de usuarios */
@@ -161,13 +161,13 @@ function login(){
     var usu=$('#usu_codigo').val();
     var pass=$('#usu_password').val();
     if(usu!=""&&pass!=""){
-        $('#cargando_app').fadeIn(300);
+        $('#cargando_app').show();
         db.transaction(function(tx){tx.executeSql('select * from usuarios WHERE usu_codigo=? AND usu_password=?', [usu,pass], function(tx, rs) {
           if(rs.rows.length) {
             g_usuario[0]=rs.rows.item(0).usu_codigo;
             g_usuario[1]=rs.rows.item(0).usu_nombre;
             g_usuario[2]=rs.rows.item(0).usu_rodeo;
-            pantalla_2();
+            pantalla_2();            
           }else{
             notificacion("Datos iconrrectos, intente nuevamente.","error");            
           }
@@ -191,22 +191,22 @@ function notificacion(texto,clase){
 
 /* Pantalla 2 */
 function pantalla_2(){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var partos='';
-    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_becerros is null ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_becerros is null or par_becerros = 0 ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).par_fecha,current_date(),'minutes');
-                if(diff > 240){
+                if(diff > 90){
                     css_back='red';
-                }else if(diff > 120){
+                }else if(diff > 30){
                     css_back='orange';
                 }else{
                     css_back='green';
                 }
                 partos=partos+''+
                     '<tr onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+
-                        '<td height="35" style="background-color:'+css_back+';"></td>'+
+                        '<td  width="50" height="35" style="background-color:'+css_back+';"></td>'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
@@ -215,26 +215,30 @@ function pantalla_2(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><strong>Calving App</strong></h4></div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_2()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<h4><strong>Calving App</strong></h4>'+'</div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
         '<div class="margins">'+
         '<div class="panel panel-default">'+
           '<div class="panel-heading">Vacas Activas: '+rs.rows.length+'</div>'+
-          '<table id="activelist" class="table table-condensed">'+
+          '<div id="tableContainer" class="tableContainer">'+
+          '<table id="tabla_fix" class="table table-condensed" >'+
             '<thead>'+
               '<tr>'+
-                '<th></th>'+
+                '<th width="50"></th>'+
                 '<th>ID Vaca</th>'+
                 '<th>Hora</th>'+
                 '<th>Fecha</th>'+
               '</tr>'+
             '</thead>'+
-            '<tbody>'+             
-              '<tr>'+partos+          
+            '<tbody>'+
+                partos+          
             '</tbody>'+
            '</table>'+       
+           '</div>'+
         '</div>'+
         '<div class="functions">'+
             '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span>Nuevo Parto</button>'+
@@ -243,17 +247,22 @@ function pantalla_2(){
         '</div>'+
         '</div>';
     $('#app').html(html);
-    //dataTable_pantalla_2();
-    $('#cargando_app').fadeOut(300);
+    $('#tabla_fix').fixheadertable({ 
+        height : 150
+    });
+    $('#cargando_app').hide();
     })});
 }
 
 /* Pantalla 3 */
 function pantalla_3(){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -263,7 +272,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">ID</span>'+
-                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4">'+
+                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -277,7 +286,7 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">CC</span>'+
-                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc">'+
+                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -348,15 +357,18 @@ function pantalla_3(){
             '</div>'+
         '</div>';
     $('#app').html(html);
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 /* Pantalla 4 */
 function pantalla_4(par_id,vac_id){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -462,16 +474,19 @@ function pantalla_4(par_id,vac_id){
             '</div>'+
         '</div>';
     $('#app').html(html);
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 /* Pantalla 5 */
 function pantalla_5(par_id,becerro){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/becerro4.png"/> | Becerro</h4></div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<!--<a href=""><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>!--></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/becerro4.png"/> | Becerro</h4>'+
+            '</div>'+        
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -484,7 +499,7 @@ function pantalla_5(par_id,becerro){
                                         '<input name="bec_sexo" id="bec_sexo" type="radio" value="M" '+($.isArray(becerro)&&becerro[1]=='M'?'checked':'')+'>MACHO'+
                                     '</label>'+ 
                                     '<label name="lbl_bec_sexo" class="btn btn-default '+($.isArray(becerro)&&becerro[1]=='H'?'active':'')+'">'+
-                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='F'?'checked':'')+'>HEMBRA'+
+                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='H'?'checked':'')+'>HEMBRA'+
                                     '</label>'+
                                 '</div>'+ 
                             '</div>'+
@@ -494,20 +509,20 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="status_b" class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label id="lbl_group7" class="btn btn-default">'+
-                                    '<input name="group7" id="group7" type="radio" value="v">V'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>V'+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default">'+
-                                    '<input name="group7" id="group7" type="radio" value="ma">MA'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='ma'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="ma" '+($.isArray(becerro)&&becerro[2]=='ma'?'checked':'')+'>MA'+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default">'+
-                                    '<input name="group7" id="group7" type="radio" value="a">A'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>A'+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default">'+
-                                    '<input id="lbl_group7" name="group7" id="group7" type="radio" value="p">P'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
+                                    '<input id="bec_condicion" name="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>P'+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default">'+
-                                    '<input name="group7" id="group7" type="radio" value="m">M'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>M'+
                                     '</label>'+
                                 '</div>'+
                             '</div>'+
@@ -520,14 +535,14 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                             '<div id="perineo" class="btn-toolbar" role="toolbar">'+
                                 '<div class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='1'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="1" '+($.isArray(becerro)&&becerro[2]=='1'?'checked':'')+'>1</button>'+
+                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='1'?'active':'')+'">'+
+                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="1" '+($.isArray(becerro)&&becerro[3]=='1'?'checked':'')+'>1</button>'+
                                     '</label>'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='2'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="2" '+($.isArray(becerro)&&becerro[2]=='2'?'checked':'')+'>2</button>'+
+                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='2'?'active':'')+'">'+
+                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="2" '+($.isArray(becerro)&&becerro[3]=='2'?'checked':'')+'>2</button>'+
                                     '</label>'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='3'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="3" '+($.isArray(becerro)&&becerro[2]=='3'?'checked':'')+'>3</button>'+
+                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='3'?'active':'')+'">'+
+                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="3" '+($.isArray(becerro)&&becerro[3]=='3'?'checked':'')+'>3</button>'+
                                     '</label>'+
                                 '</div>'+
                             '</div>'+
@@ -537,13 +552,13 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">N°</span>'+
-                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="Caravana" value="'+($.isArray(becerro)?becerro[3]:'')+'">'+
+                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="Caravana" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Técnico</span>'+
-                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="Nombre" value="'+($.isArray(becerro)?becerro[4]:g_usuario[1])+'">'+
+                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="Nombre" value="'+($.isArray(becerro)?becerro[5]:g_usuario[1])+'">'+
                             '</div>'+
-                            '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[5]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?'Actualizar':'Agregar')+'</button>'+
+                            '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[6]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?'Actualizar':'Agregar')+'</button>'+
                         '</div>'+
                     '</div>'+
                 '</form>'+
@@ -551,17 +566,20 @@ function pantalla_5(par_id,becerro){
                 '</div>'+
             '</div>'+
         '</div>';
-    mostrar_becerros(par_id,($.isArray(becerro)?becerro[5]:0));    
+    mostrar_becerros(par_id,($.isArray(becerro)?becerro[6]:0));    
     $('#app').html(html);
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 /* Pantalla 6 */
 function pantalla_6(bec_id,bec_caravana){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/becerro4.png"/>| CALOSTRO <xx></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/becerro4.png"/>| CALOSTRO</h4>'+
+            '</div>'+
            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -579,15 +597,15 @@ function pantalla_6(bec_id,bec_caravana){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Cantidad</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="">'+
+                                '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Vigor</span>'+
                                 '<input id="cal_vigor" name="cal_vigor" type="text" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Paso al nacer</span>'+
-                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="Kg">'+
+                                '<span class="input-group-addon">Peso al nacer</span>'+
+                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="Kg" >'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">Técnico</span>'+
@@ -602,14 +620,14 @@ function pantalla_6(bec_id,bec_caravana){
             '</div>'+
         '</div>';
     $('#app').html(html);
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 /* Pantalla 7 */
 function pantalla_7(){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and bec_muerto is null and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and bec_muerto<>"S" and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
@@ -622,7 +640,6 @@ function pantalla_7(){
                 }
                 becerros=becerros+''+
                     '<tr onclick="marcar_becerro('+rs.rows.item(i).bec_id+','+rs.rows.item(i).bec_caravana+')" id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
-                        '<td height="35" style="background-color:'+css_back+';"></td>'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td valign="middle">'+rs.rows.item(i).bec_caravana+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(11,16)+'</td>'+
@@ -632,17 +649,19 @@ function pantalla_7(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><strong>Calving App</strong></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><strong>Calving App</strong></h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
                 '<div class="panel panel-default">'+
                     '<div class="panel-heading">Becerros Activos: '+rs.rows.length+'</div>'+
-                        '<table id="activelist" class="table table-condensed">'+
+                        '<table id="tabla_fix" class="table table-condensed">'+
                             '<thead>'+
                               '<tr>'+
-                                '<th></th>'+
                                 '<th>ID Vaca</th>'+
                                 '<th>Becerro</th>'+
                                 '<th>Hora</th>'+
@@ -650,7 +669,7 @@ function pantalla_7(){
                               '</tr>'+
                             '</thead>'+
                             '<tbody>'+             
-                              '<tr>'+becerros+          
+                                becerros+          
                             '</tbody>'+
                            '</table>'+       
                         '</div>'+
@@ -672,12 +691,15 @@ function pantalla_7(){
             '</div>'+
         '</div>';
     $('#app').html(html);
-    $('#cargando_app').fadeOut(300);
+    $('#tabla_fix').fixheadertable({ 
+        height : 150
+    });
+    $('#cargando_app').hide();
     })});
 }
 
 function comienza_parto(){
-    $('#cargando_app').fadeIn(300);    
+    $('#cargando_app').show();    
     if(validar_formulario('frm_comienzo_parto','todos')){
         var values = new Array();
         values[0]=$('#par_vaca').val();
@@ -697,11 +719,11 @@ function comienza_parto(){
           pantalla_2();
         })});
     }
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 function fin_parto(par_id){
-    $('#cargando_app').fadeIn(300);    
+    $('#cargando_app').show();    
     if(validar_formulario('frm_fin_parto','todos')){
         var values = new Array();
         values[0]=$('#par_becerros:checked').val();
@@ -713,34 +735,35 @@ function fin_parto(par_id){
         ultimo_movimiento();
         pantalla_5(par_id);
     }
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 function cargar_becerro(par_id,bec_id){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     if(validar_formulario('frm_cargar_becerro','todos')){
         var values = new Array();
         values[0]=par_id;
         values[1]=$('#bec_sexo:checked').val();
-        values[2]=$('#bec_presentacion:checked').val();
-        values[3]=$('#bec_caravana').val();
-        values[4]=$('#bec_tecnico').val();
-        values[5]=current_date();
+        values[2]=$('#bec_condicion:checked').val();
+        values[3]=$('#bec_presentacion:checked').val();
+        values[4]=$('#bec_caravana').val();
+        values[5]=$('#bec_tecnico').val();
+        values[6]=current_date();
         if(bec_id>0){
-            db.transaction(function(tx){tx.executeSql("update becerros set bec_sexo='"+values[1]+"', bec_presentacion='"+values[2]+"', bec_caravana='"+values[3]+"', bec_tecnico='"+values[4]+"' where bec_id='"+bec_id+"'",[],function(tx,rs){
+            db.transaction(function(tx){tx.executeSql("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'",[],function(tx,rs){
                 ultimo_movimiento();
                 pantalla_5(par_id)            
             })});
         }
         else{
-            db.transaction(function(tx){tx.executeSql("insert into becerros (bec_parto,bec_sexo,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
+            db.transaction(function(tx){tx.executeSql("insert into becerros (bec_parto,bec_sexo,bec_condicion,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
                 ultimo_movimiento();
                 pantalla_5(par_id)            
             })});
         }
         
     }
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 function mostrar_becerros(par_id,bec_id){
@@ -777,18 +800,18 @@ function mostrar_becerros(par_id,bec_id){
             '</div>';
         }        
         $('#tabla_becerros').html(html);
-        $('#cargando_app').fadeOut(300);
+        $('#cargando_app').hide();
     })});
 }
 
 function buscar_vaca(id_vaca){
     if(id_vaca!=""){
-        $('#cargando_app').fadeIn(300);
+        $('#cargando_app').show();
         db.transaction(function(tx){tx.executeSql('select * from vacas WHERE vac_id=?', [id_vaca], function(tx, rs) {
           if(rs.rows.length) {
             $('input:radio[name=par_vaca_raza][value='+rs.rows.item(0).vac_raza+']').click();
           }
-          $('#cargando_app').fadeOut(300);
+          $('#cargando_app').hide();
         })});        
     }
 }
@@ -859,6 +882,7 @@ function marcar_becerro(bec_id,bec_caravana){
 function marcar_muerto(){
     if($('#bec_marcado').val()!=""){
         db.transaction(function(tx){tx.executeSql("update becerros set bec_muerto='S' where bec_id='"+$('#bec_marcado').val()+"'")});       
+        ultimo_movimiento();
         pantalla_7();
     }
 }
@@ -876,7 +900,7 @@ function editar_becerro(){
 }
 
 function cargar_calostro(bec_id){
-    $('#cargando_app').fadeIn(300);
+    $('#cargando_app').show();
     if(validar_formulario('frm_cargar_calostro','todos')){
         var values = new Array();
         values[0]=bec_id;
@@ -891,7 +915,7 @@ function cargar_calostro(bec_id){
             pantalla_7();
         })});
     }
-    $('#cargando_app').fadeOut(300);
+    $('#cargando_app').hide();
 }
 
 function obtener_becerro(bec_id){
@@ -900,10 +924,12 @@ function obtener_becerro(bec_id){
             becerro=Array();
             becerro[0]=rs.rows.item(0).bec_parto;
             becerro[1]=rs.rows.item(0).bec_sexo;
-            becerro[2]=rs.rows.item(0).bec_presentacion;
-            becerro[3]=rs.rows.item(0).bec_caravana;
-            becerro[4]=rs.rows.item(0).bec_tecnico;
-            becerro[5]=rs.rows.item(0).bec_id;
+            becerro[2]=rs.rows.item(0).bec_condicion;
+            becerro[3]=rs.rows.item(0).bec_presentacion;
+            becerro[4]=rs.rows.item(0).bec_caravana;
+            becerro[5]=rs.rows.item(0).bec_tecnico;
+            becerro[6]=rs.rows.item(0).bec_id;
+            console.log(becerro);
             pantalla_5(rs.rows.item(0).bec_parto,becerro);
         }
         else{
@@ -911,3 +937,44 @@ function obtener_becerro(bec_id){
         }
     })});
 }
+
+/* Verifico si necesita actualizar la aplicacion */
+
+function buscar_actualizaciones(){
+  if(navigator.onLine){
+    db.transaction(function(tx){tx.executeSql('select * from configuracion', [], function(tx, rs) {
+      $.post('http://www.mobile-promotive.com.ar/uniohio/datos.php',{accion:'ultima_actualizacion',fecha:rs.rows.item(0).cfg_ult_sinc},function(res){
+        if(res!="NO"){
+          actualizar();
+        }
+        else if(datediff(rs.rows.item(0).cfg_ult_sinc,rs.rows.item(0).cfg_ult_act_local,'minutes')>60){
+            actualizar();
+        }
+        else{
+          setTimeout(function(){buscar_actualizaciones();},600000);
+        }
+      });
+    })});
+  }
+}
+
+function actualizar(){
+    $('#actualizar').css('bottom','-40px');
+    $('#actualizar').show();
+    $('#actualizar').animate({ bottom: '0' }, 500);    
+}
+
+function actualizar_aceptar(){
+    location.replace('sinc.html?kk='+Math.random());
+}
+
+function actualizar_cancelar(){
+    $('#actualizar').animate({ bottom: '-40' }, 500);
+}
+
+function soloNumeros(e){
+    var key = window.Event ? e.which : e.keyCode
+    return (key >= 48 && key <= 57)
+}
+
+buscar_actualizaciones();

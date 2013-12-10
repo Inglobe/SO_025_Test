@@ -24,6 +24,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/base.css" />
         <title>Calving App</title>
     </head>
     <body>
@@ -31,16 +32,22 @@
             
         </div>
         
-        <div id="cargando"><div class="imagen"></div></div>
+        <div id="cargando"></div>
         <div id="cargando_app"></div>
         <div id="notificacion"></div>
+        <div id="actualizar">
+            <span>Su aplicación requiere una sincronización!&nbsp;&nbsp;&nbsp;<span>
+            <button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm">Sincronizar</button>
+            <button type="button" onclick="actualizar_cancelar()" class="btn btn-danger btn-sm">Cancelar</button>
+        </div>
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.fixheadertable.min.js"></script>        
         <script type="text/javascript" src="js/bootstrap.min.js"></script>        
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
-            verificar_base();            
+            verificar_base();
         </script>
     </body>
 </html>
