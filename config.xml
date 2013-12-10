@@ -14,7 +14,7 @@
     <preference name="webviewbounce" value="true" />
     <gap:plugin name="Device" value="org.apache.cordova.core.Device"/>
     <gap:plugin name="File" value="org.apache.cordova.core.FileUtils" />
-    <gap:plugin name="FileTransfer" value="org.apache.cordova.core.FileTransfer" />
-    <gap:plugin name="SplashScreen" value="org.apache.cordova.core.SplashScreen" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="org.apache.cordova.splashscreen" />
 
 </widget>
