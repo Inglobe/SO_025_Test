@@ -1,13 +1,14 @@
 body {
 	background-color:#029e73;
 	background-image: none;
+	font-size: 20px;
 }
 .app {
 	background:none;
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	zoom:110%;
+
 }
 .app li{
 	display: inline;
@@ -16,6 +17,11 @@ body {
 .container{
 	padding-left: 1em;
 	padding-right: 1em;
+}
+
+.btn-lg{
+
+	padding: 35px 40px;
 }
 
 /*-------------First Screen----------------*/
