@@ -134,6 +134,7 @@ body {
 
 }
 .panel-default>.panel-heading {
+	background-image:none;
 	text-align: left;
 	background-color: #07251c;
 	color: white;
@@ -291,6 +292,9 @@ tbody {
 .input-group-sm>.form-control{
 	height: 54px;
 	font-size: 30px;
+}
+.btn-primary:hover, .btn-primary:focus {
+	background-position: 0;
 }
 
 /*-------------Forth Screen----------------*/
