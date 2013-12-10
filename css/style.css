@@ -31,7 +31,9 @@ body {
 
 }
 
-
+.header_b{
+	font-size: 35px;
+}
 
 /*-------------First Screen----------------*/
 .input-group-addon{

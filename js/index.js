@@ -215,10 +215,10 @@ function pantalla_2(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm" style="float:left;margin:5px 10px 0 0;">Sincronizar</button>'+
-            '<h4><strong>Calving App</strong></h4>'+'</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+            
+            '<h4><strong>Calving App</strong></h4>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:5px 10px 0 0;">Sincronizar</button>'+'</div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
         '<div class="margins">'+
@@ -259,11 +259,11 @@ function pantalla_3(){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+               
                 '<h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4>'+
+                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
             '<form id="frm_comienzo_parto" action="">'+ 
@@ -365,11 +365,11 @@ function pantalla_4(par_id,vac_id){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+                
                 '<h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4>'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -483,10 +483,10 @@ function pantalla_5(par_id,becerro){
     var html=''+
         '<div class="header row">'+
            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
                 '<h4><img src="img/becerro4.png"/> | Becerro</h4>'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+        
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -576,11 +576,11 @@ function pantalla_6(bec_id,bec_caravana){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+                
                 '<h4><img src="img/becerro4.png"/>| CALOSTRO</h4>'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
@@ -649,11 +649,11 @@ function pantalla_7(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+                
                 '<h4><strong>Calving App</strong></h4>'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
