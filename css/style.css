@@ -293,7 +293,7 @@ tbody {
 	border: none;
 }
 .input-group-sm>.form-control{
-	height: 54px;
+	height: 60px;
 	font-size: 30px;
 }
 .btn-primary:hover, .btn-primary:focus {
