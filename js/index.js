@@ -485,8 +485,8 @@ function pantalla_5(par_id,becerro){
            '<div class="col-xs-6 col-sm-6 col-md-6">'+
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
                 '<h4><img src="img/becerro4.png"/> | Becerro</h4>'+
-            '</div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<!--<a href=""><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>!--></h4></div>'+
+            '</div>'+        
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
