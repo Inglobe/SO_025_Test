@@ -1,7 +1,7 @@
 body {
 	background-color:#029e73;
 	background-image: none;
-	font-size: 40px;
+	font-size: 30px;
 }
 .app {
 	background:none;
@@ -20,8 +20,18 @@ body {
 }
 
 .btn-lg{
-
 	padding: 35px 40px;
+	font-size:30px;
+}
+.input-group-lg>.form-control{
+
+	height: 70px;
+
+}
+
+div.t_fixed_header.ui .body td {
+
+	line-height: 30px;
 }
 
 /*-------------First Screen----------------*/
