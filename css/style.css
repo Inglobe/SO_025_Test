@@ -19,22 +19,19 @@ body {
 	padding-right: 1em;
 }
 
-.btn-lg{
-	padding: 35px 40px;
+.btn{
+	
 	font-size:30px;
 }
 
 .input-group-lg>.form-control{
 
 	height: 70px;
-
-}
-
-
-.input-group-lg>.form-control{
 	font-size: 30px;
 
 }
+
+
 
 /*-------------First Screen----------------*/
 .input-group-addon{
@@ -237,7 +234,7 @@ tbody {
 /*-------------Third Screen----------------*/
 
 .raza h4 {
-	font-size: 14px;
+	font-size: 30px;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
@@ -250,7 +247,7 @@ tbody {
 
 }
 #higiene h4 {
-	font-size: 14px;
+	font-size: 30px;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
@@ -287,13 +284,13 @@ tbody {
 }
 .input-group-sm>.input-group-addon{
 	padding-left: 1em;
-	font-size: 14px;
+	font-size: 30px;
 	text-transform: none;
 	border: none;
 }
 .input-group-sm>.form-control{
-	height: 33px;
-	font-size: 14px;
+	height: 54px;
+	font-size: 30px;
 }
 
 /*-------------Forth Screen----------------*/
