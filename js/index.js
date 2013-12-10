@@ -181,11 +181,11 @@ function notificacion(texto,clase){
     $('#notificacion').removeClass();
     $('#notificacion').addClass(clase);
     $('#notificacion').html(texto);
-    $('#notificacion').css('bottom','-50px');
+    $('#notificacion').css('bottom','-100px');
     $('#notificacion').show();
     $('#notificacion').animate({ bottom: '0' }, 300);
     setTimeout(function(){
-      $('#notificacion').animate({ bottom: '-50px' }, 300);
+      $('#notificacion').animate({ bottom: '-100px' }, 300);
     },3000)
 }
 
@@ -216,7 +216,7 @@ function pantalla_2(){
         var html=''+
         '<div class="header row">'+
             '<div class="col-xs-6 col-sm-6 col-md-6">'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-ms" style="float:left;margin:5px 10px 0 0;">Sincronizar</button>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm" style="float:left;margin:5px 10px 0 0;">Sincronizar</button>'+
             '<h4><strong>Calving App</strong></h4>'+'</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
         '</div>'+
