@@ -21,7 +21,7 @@ body {
 
 .btn{
 	
-	font-size:30px;
+	font-size:50px;
 }
 
 .input-group-lg>.form-control{
@@ -189,7 +189,6 @@ tbody {
 	display: block;
 	margin-top: 0.5em;
 	padding-left: 2em;
-	font-size: 1.5em;
 }
 .functions .glyphicon:empty{
 	float: left;
