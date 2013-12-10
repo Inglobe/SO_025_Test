@@ -12,8 +12,9 @@
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
-    <gap:plugin name="Device" value="org.apache.cordova.core.Device"/>
-    <gap:plugin name="File" value="org.apache.cordova.core.FileUtils" />
+    <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.file" />
+    <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.file-transfer" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
 
