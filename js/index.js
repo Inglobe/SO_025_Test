@@ -206,7 +206,7 @@ function pantalla_2(){
                 }
                 partos=partos+''+
                     '<tr onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+
-                        '<td height="35" style="background-color:'+css_back+';"></td>'+
+                        '<td  width="50" height="35" style="background-color:'+css_back+';"></td>'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
@@ -215,26 +215,30 @@ function pantalla_2(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><strong>Calving App</strong></h4></div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_2()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<h4><strong>Calving App</strong></h4>'+'</div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
         '<div class="margins">'+
         '<div class="panel panel-default">'+
           '<div class="panel-heading">Vacas Activas: '+rs.rows.length+'</div>'+
-          '<table id="activelist" class="table table-condensed">'+
+          '<div id="tableContainer" class="tableContainer">'+
+          '<table id="tabla_fix" class="table table-condensed" >'+
             '<thead>'+
               '<tr>'+
-                '<th></th>'+
+                '<th width="50"></th>'+
                 '<th>ID Vaca</th>'+
                 '<th>Hora</th>'+
                 '<th>Fecha</th>'+
               '</tr>'+
             '</thead>'+
-            '<tbody>'+             
-              '<tr>'+partos+          
+            '<tbody>'+
+                partos+          
             '</tbody>'+
            '</table>'+       
+           '</div>'+
         '</div>'+
         '<div class="functions">'+
             '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span>Nuevo Parto</button>'+
@@ -243,7 +247,9 @@ function pantalla_2(){
         '</div>'+
         '</div>';
     $('#app').html(html);
-    //dataTable_pantalla_2();
+    $('#tabla_fix').fixheadertable({ 
+        height : 150
+    });
     $('#cargando_app').hide();
     })});
 }
@@ -253,7 +259,10 @@ function pantalla_3(){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -356,7 +365,10 @@ function pantalla_4(par_id,vac_id){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -470,7 +482,10 @@ function pantalla_5(par_id,becerro){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/becerro4.png"/> | Becerro</h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/becerro4.png"/> | Becerro</h4>'+
+            '</div>'+
            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<!--<a href=""><span class="glyphicon glyphicon-arrow-left"></span> Volver</a>!--></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -561,7 +576,10 @@ function pantalla_6(bec_id,bec_caravana){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6"><h4><img src="img/becerro4.png"/>| CALOSTRO <xx></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><img src="img/becerro4.png"/>| CALOSTRO</h4>'+
+            '</div>'+
            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
@@ -631,14 +649,17 @@ function pantalla_7(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6"><h4><strong>Calving App</strong></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<h4><strong>Calving App</strong></h4>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
                 '<div class="panel panel-default">'+
                     '<div class="panel-heading">Becerros Activos: '+rs.rows.length+'</div>'+
-                        '<table id="activelist" class="table table-condensed">'+
+                        '<table id="tabla_fix" class="table table-condensed">'+
                             '<thead>'+
                               '<tr>'+
                                 '<th>ID Vaca</th>'+
@@ -648,7 +669,7 @@ function pantalla_7(){
                               '</tr>'+
                             '</thead>'+
                             '<tbody>'+             
-                              '<tr>'+becerros+          
+                                becerros+          
                             '</tbody>'+
                            '</table>'+       
                         '</div>'+
@@ -670,6 +691,9 @@ function pantalla_7(){
             '</div>'+
         '</div>';
     $('#app').html(html);
+    $('#tabla_fix').fixheadertable({ 
+        height : 400
+    });
     $('#cargando_app').hide();
     })});
 }
