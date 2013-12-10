@@ -959,7 +959,7 @@ function buscar_actualizaciones(){
 }
 
 function actualizar(){
-    $('#actualizar').css('bottom','-40px');
+    $('#actualizar').css('bottom','-100px');
     $('#actualizar').show();
     $('#actualizar').animate({ bottom: '0' }, 500);    
 }
@@ -969,7 +969,7 @@ function actualizar_aceptar(){
 }
 
 function actualizar_cancelar(){
-    $('#actualizar').animate({ bottom: '-40' }, 500);
+    $('#actualizar').animate({ bottom: '-100' }, 500);
 }
 
 function soloNumeros(e){
