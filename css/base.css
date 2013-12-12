@@ -89,7 +89,7 @@ div.t_fixed_header_main_wrapper_child {
 
 div.t_fixed_header_main_wrapper.ui {
 	font-weight		: normal;
-	font-size		: 1.1em;
+	font-size		: 0.5em;
 }
 
 div.t_fixed_header_main_wrapper.ui  div.t_fixed_header_caption {
@@ -150,7 +150,7 @@ div.t_fixed_header.ui .body tr {
 div.t_fixed_header.ui .body td {
 	padding			: 5px;
 	text-align 		: center;
-	line-height		: 15px;
+	line-height		: 70px;
 }
 
 div.t_fixed_header.ui .body tr:last-child td {

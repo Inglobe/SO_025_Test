@@ -1,6 +1,7 @@
 body {
 	background-color:#029e73;
 	background-image: none;
+	font-size: 50px;
 }
 .app {
 	background:none;
@@ -15,6 +16,20 @@ body {
 .container{
 	padding-left: 1em;
 	padding-right: 1em;
+}
+.btn{
+	font-size: 40px;
+}
+.input-group .form-control{
+	height: 78px;
+	font-size: 40px;
+}
+.input-group-sm>.form-control{
+	height: 78px;
+	font-size: 40px;
+}
+.input-group-sm>.input-group-addon{
+	font-size: 40px;
 }
 
 /*-------------First Screen----------------*/
@@ -172,7 +187,7 @@ tbody {
 	display: block;
 	margin-top: 0.5em;
 	padding-left: 2em;
-	font-size: 1.5em;
+	font-size: 1em;
 }
 .functions .glyphicon:empty{
 	float: left;
@@ -218,7 +233,7 @@ tbody {
 /*-------------Third Screen----------------*/
 
 .raza h4 {
-	font-size: 14px;
+	font-size: 0.5em;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
@@ -231,12 +246,12 @@ tbody {
 
 }
 #higiene h4 {
-	font-size: 14px;
+	font-size: 0.5em;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	background-color: #07251c;
 	text-transform:none;
 	border-radius: 5px;
@@ -245,9 +260,8 @@ tbody {
 
 #perineo{
 
-	font-size: 14px;	
-	padding-top: 5px;
-	padding-bottom: 5px;
+	font-size: 0.5em;	
+
 }
 
 #raza_option .btn-group-justified .btn{
@@ -266,7 +280,7 @@ tbody {
 #perineo .btn-group-justified .btn{
 	width: 32%;
 }
-.input-group-sm>.input-group-addon{
+/*.input-group-sm>.input-group-addon{
 	padding-left: 1em;
 	font-size: 14px;
 	text-transform: none;
@@ -275,7 +289,7 @@ tbody {
 .input-group-sm>.form-control{
 	height: 33px;
 	font-size: 14px;
-}
+}*/
 
 /*-------------Forth Screen----------------*/
 
@@ -313,14 +327,10 @@ tbody {
 }
 
 /*-------------Final Screen----------------*/
-.functions_f{
-	display: block;
-}
 
 .functions_f button{
 	display: block;
-	margin-top: 0.5em;	
-	font-size: 1em;
+
 }
 .functions_f .glyphicon{
 
@@ -360,7 +370,7 @@ background-color: #771519;
 
 #notificacion {
 	width: 100%;
-	height: 30px;
+	height: 70px;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -387,7 +397,7 @@ background-color: #771519;
 	color: #fff;
 	text-align: right;
 	padding: 5px 10px 5px 0px;
-	height: 40px;
+	height: 100px;
 	background-color: rgba(0,0,0,.9);
 	display: none;
 }
