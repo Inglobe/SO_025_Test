@@ -511,19 +511,19 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="status_b" class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>'+lang.bec_cond_V+''+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>'+lang.bec_cond_A+''+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
-                                    '<input id="bec_condicion" name="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>'+lang.bec_cond_P+''+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>'+lang.bec_cond_P+''+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
                                     '</label>'+
                                 '</div>'+
@@ -717,7 +717,6 @@ function comienza_parto(){
             db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
             ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
           }
-          console.log("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')");
           db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')")});
           ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')");
           pantalla_2();
@@ -824,8 +823,7 @@ function validar_formulario(form,campos){
     var vacio=false
     var $inputs = $('#'+form+' :input');
     $inputs.each(function() {
-        if(this.type=='checkbox'&&typeof($('#'+this.name+':checked').val())==="undefined") vacio=true;
-        if(this.type=='radio'&&typeof($('#'+this.name+':checked').val())==="undefined") vacio=true;
+        if(this.type=='radio'&&!document.querySelector('input[name="'+this.name+'"]:checked')) vacio=true;
         if(this.type=='text'&&$(this).val()=='') vacio=true;
     });
     if(vacio) notificacion("Complete todos los datos.","error");
@@ -936,7 +934,6 @@ function obtener_becerro(bec_id){
             becerro[4]=rs.rows.item(0).bec_caravana;
             becerro[5]=rs.rows.item(0).bec_tecnico;
             becerro[6]=rs.rows.item(0).bec_id;
-            console.log(becerro);
             pantalla_5(rs.rows.item(0).bec_parto,becerro);
         }
         else{
