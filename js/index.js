@@ -219,8 +219,9 @@ function pantalla_2(){
         var html=''+
         '<div class="header row">'+
             '<div class="col-xs-6 col-sm-6 col-md-6">'+
-            '<h4><strong>Calving App</strong></h4>'+'</div>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+            
+            '<h4><strong>Calving App</strong></h4>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+            '</div>'+
             '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
