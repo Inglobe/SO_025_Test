@@ -251,7 +251,7 @@ function pantalla_2(){
         '</div>';
     $('#app').html(html);
     $('#tabla_fix').fixheadertable({ 
-        height : 150
+        height : 400
     });
     $('#cargando_app').hide();
     })});
@@ -694,7 +694,7 @@ function pantalla_7(){
         '</div>';
     $('#app').html(html);
     $('#tabla_fix').fixheadertable({ 
-        height : 150
+        height : 400
     });
     $('#cargando_app').hide();
     })});
