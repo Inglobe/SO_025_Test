@@ -426,8 +426,7 @@ function pantalla_4(par_id,vac_id){
                                     '</label>'+
                                     '<label class="btn btn-default">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="5">5'+
-                                    '</label>'+
-                                    
+                                    '</label>'+                                    
                                 '</div>'+
                             '</div>'+
                         '</div>'+
@@ -555,7 +554,7 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
-                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
+                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
@@ -596,19 +595,19 @@ function pantalla_6(bec_id,bec_caravana){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.calidad+'</span>'+
-                                '<input id="cal_calidad" name="cal_calidad" type="text" class="form-control" placeholder="">'+
+                                '<input id="cal_calidad" name="cal_calidad" type="number" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
+                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
-                                '<input id="cal_vigor" name="cal_vigor" type="text" class="form-control" placeholder="">'+
+                                '<input id="cal_vigor" name="cal_vigor" type="number" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
-                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="" >'+
+                                '<input id="cal_peso" name="cal_peso" type="number" class="form-control" placeholder="" >'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
