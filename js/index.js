@@ -169,6 +169,7 @@ function login(){
             g_usuario[0]=rs.rows.item(0).usu_codigo;
             g_usuario[1]=rs.rows.item(0).usu_nombre;
             g_usuario[2]=rs.rows.item(0).usu_rodeo;
+            g_usuario[3]=rs.rows.item(0).usu_rodeo_desc;
             pantalla_2();            
           }else{
             notificacion("Datos iconrrectos, intente nuevamente.","error");            
@@ -195,7 +196,7 @@ function notificacion(texto,clase){
 function pantalla_2(){
     $('#cargando_app').show();
     var partos='';
-    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_becerros is null or par_becerros = 0 ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_rodeo="'+g_usuario[2]+'" and (par_becerros is null or par_becerros = 0) ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).par_fecha,current_date(),'minutes');
@@ -220,7 +221,7 @@ function pantalla_2(){
             '<div class="col-xs-6 col-sm-6 col-md-6">'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
             '<h4><strong>Calving App</strong></h4>'+'</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
         '<div class="margins">'+
@@ -265,7 +266,7 @@ function pantalla_3(){
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><img src="img/vaca.png"/> | <strong>'+lang.info_vaca+'</strong></h4>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<form id="frm_comienzo_parto" action="">'+ 
@@ -371,7 +372,7 @@ function pantalla_4(par_id,vac_id){
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.parto+'</h4>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -488,7 +489,7 @@ function pantalla_5(par_id,becerro){
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><img src="img/becerro4.png"/> | '+lang.becerro+'</h4>'+
             '</div>'+        
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -582,7 +583,7 @@ function pantalla_6(bec_id,bec_caravana){
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><img src="img/becerro4.png"/> | '+lang.calostro+'</h4>'+
             '</div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
@@ -629,7 +630,7 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE par_rodeo="'+g_usuario[2]+'" and bec_parto=par_id and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
@@ -655,7 +656,7 @@ function pantalla_7(){
                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><strong>Calving App</strong></h4>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
@@ -712,13 +713,14 @@ function comienza_parto(){
         values[5]=$('#par_tecnico').val();
         values[6]=current_date();
         values[7]=g_usuario[2];
+        values[8]=g_usuario[3];
         db.transaction(function(tx){tx.executeSql('select * from vacas WHERE vac_id=?', [values[0]], function(tx, rs) {
           if(!rs.rows.length) {
             db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
             ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
           }
-          db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')")});
-          ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')");
+          db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')")});
+          ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')");
           pantalla_2();
         })});
     }
