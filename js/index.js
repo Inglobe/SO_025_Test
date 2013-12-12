@@ -184,11 +184,11 @@ function notificacion(texto,clase){
     $('#notificacion').removeClass();
     $('#notificacion').addClass(clase);
     $('#notificacion').html(texto);
-    $('#notificacion').css('bottom','-30px');
+    $('#notificacion').css('bottom','-70px');
     $('#notificacion').show();
     $('#notificacion').animate({ bottom: '0' }, 300);
     setTimeout(function(){
-      $('#notificacion').animate({ bottom: '-30px' }, 300);
+      $('#notificacion').animate({ bottom: '-70px' }, 300);
     },3000)
 }
 
@@ -965,11 +965,11 @@ function buscar_actualizaciones(){
 
 function actualizar(){
     html=''+
-        '<span>'+lang.msg_sincronizar+'&nbsp;&nbsp;&nbsp;<span>'+
+        '<span>'+lang.msg_sincronizar+'<span>'+
         '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm">'+lang.sincronizar+'</button>&nbsp;&nbsp;'+
         '<button type="button" onclick="actualizar_cancelar()" class="btn btn-danger btn-sm">'+lang.cancelar+'</button>';
     $('#actualizar').html(html);
-    $('#actualizar').css('bottom','-40px');
+    $('#actualizar').css('bottom','-70px');
     $('#actualizar').show();
     $('#actualizar').animate({ bottom: '0' }, 500);    
 }
@@ -979,7 +979,7 @@ function actualizar_aceptar(){
 }
 
 function actualizar_cancelar(){
-    $('#actualizar').animate({ bottom: '-40' }, 500);
+    $('#actualizar').animate({ bottom: '-70' }, 500);
 }
 
 function soloNumeros(e){
