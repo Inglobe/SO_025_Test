@@ -18,6 +18,7 @@
  */
 
 /* Abro la base de datos */
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
@@ -86,7 +87,8 @@ function descargar_base_init(){
         "vacas",
         "partos",
         "becerros",
-        "calostro"
+        "calostro",
+        "movimientos"
     );
     descargar_tablas_init(db,tablas,0);
 }
@@ -98,7 +100,7 @@ function descargar_tablas_init(db,tablas,index){
     var error = 0;
     $.ajax({
         type: "post",
-        url: "http://www.mobile-promotive.com.ar/uniohio/datos.php",
+        url: dir_datos+"datos.php",
         dataType: "text",
         data: { accion: "descargar_datos", tabla: tablas[indice], init:'si' },
         cache: false,
@@ -138,19 +140,19 @@ function descargar_tablas_init(db,tablas,index){
 function pantalla_login(){
     html='<div class="container">'+
             '<div id="lang" style="margin-top:2%;">'+
-                '<h4><a><img class="english" src="img/fondo.png" /></a></h4>'+
-                '<h4><a><img class="espanol" src="img/fondo.png" /></a></h4>'+
+                '<h4><a><img onclick="cambiar_idioma(\'en\')" class="english" src="img/fondo.png" /></a></h4>'+
+                '<h4><a><img onclick="cambiar_idioma(\'es\')" class="espanol" src="img/fondo.png" /></a></h4>'+
             '</div>'+
             '<div id="logo"><img src="img/logo.png"/></div>'+
             '<div class="input-group input-group-lg loginscreen" >'+
               '<span class="input-group-addon" id="home-ico"><span class="glyphicon glyphicon-user"></span></span>'+
-              '<input id="usu_codigo" type="text" class="form-control" placeholder="Username">'+
+              '<input id="usu_codigo" type="text" class="form-control" placeholder="'+lang.usuario+'">'+
             '</div>'+
             '<div class="input-group input-group-lg">'+
               '<span class="input-group-addon" id="lock-ico"><span class="glyphicon glyphicon-lock"></span></span>'+
-              '<input id="usu_password" type="password" class="form-control" placeholder="Password">'+
+              '<input id="usu_password" type="password" class="form-control" placeholder="'+lang.password+'">'+
             '</div>'+
-            '<button id="login" type="button" onclick="login()" class="btn btn-primary btn-lg">Ingresar</button>'+
+            '<button id="login" type="button" onclick="login()" class="btn btn-primary btn-lg">'+lang.ingresar+'</button>'+
         '</div>';
     $('#app').html(html);
     $('#cargando').hide();
@@ -181,11 +183,11 @@ function notificacion(texto,clase){
     $('#notificacion').removeClass();
     $('#notificacion').addClass(clase);
     $('#notificacion').html(texto);
-    $('#notificacion').css('bottom','-100px');
+    $('#notificacion').css('bottom','-30px');
     $('#notificacion').show();
     $('#notificacion').animate({ bottom: '0' }, 300);
     setTimeout(function(){
-      $('#notificacion').animate({ bottom: '-100px' }, 300);
+      $('#notificacion').animate({ bottom: '-30px' }, 300);
     },3000)
 }
 
@@ -215,23 +217,23 @@ function pantalla_2(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+            
-            '<h4><strong>Calving App</strong></h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:5px 10px 0 0;">Sincronizar</button>'+'</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> SALIR</strong></a></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+            '<h4><strong>Calving App</strong></h4>'+'</div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
         '<div class="margins">'+
         '<div class="panel panel-default">'+
-          '<div class="panel-heading">Vacas Activas: '+rs.rows.length+'</div>'+
+          '<div class="panel-heading">'+lang.vacas_activas+': '+rs.rows.length+'</div>'+
           '<div id="tableContainer" class="tableContainer">'+
           '<table id="tabla_fix" class="table table-condensed" >'+
             '<thead>'+
               '<tr>'+
                 '<th width="50"></th>'+
-                '<th>ID Vaca</th>'+
-                '<th>Hora</th>'+
-                '<th>Fecha</th>'+
+                '<th>'+lang.id_vaca+'</th>'+
+                '<th>'+lang.hora+'</th>'+
+                '<th>'+lang.fecha+'</th>'+
               '</tr>'+
             '</thead>'+
             '<tbody>'+
@@ -241,14 +243,14 @@ function pantalla_2(){
            '</div>'+
         '</div>'+
         '<div class="functions">'+
-            '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span>Nuevo Parto</button>'+
-            '<button id="becerro" onclick="pantalla_7()" type="submit" class="btn btn-primary btn-lg"><img style="margin-top:-5px" src="img/becerro.png">Becerros</button>'+
+            '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span>'+lang.nuevo_parto+'</button>'+
+            '<button id="becerro" onclick="pantalla_7()" type="submit" class="btn btn-primary btn-lg"><img style="margin-top:-5px" src="img/becerro.png">'+lang.becerros+'</button>'+
         '</div>'+
         '</div>'+
         '</div>';
     $('#app').html(html);
     $('#tabla_fix').fixheadertable({ 
-        height : 600
+        height : 150
     });
     $('#cargando_app').hide();
     })});
@@ -259,11 +261,11 @@ function pantalla_3(){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+               
-                '<h4><img src="img/vaca.png"/> | <strong>INFO.Vaca</strong></h4>'+
-                 '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+                '<h4><img src="img/vaca.png"/> | <strong>'+lang.info_vaca+'</strong></h4>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<form id="frm_comienzo_parto" action="">'+ 
@@ -271,7 +273,7 @@ function pantalla_3(){
                     '<div class="row">'+
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
-                            '<span class="input-group-addon">ID</span>'+
+                            '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
                             '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
                           '</div>'+
                         '</div>'+
@@ -279,20 +281,20 @@ function pantalla_3(){
                     '<div class="row">'+
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
-                        '<span class="input-group-addon">Lac.</span>'+
+                        '<span class="input-group-addon">'+lang.lactancia+'</span>'+
                         '<input type="text" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia">'+
                       '</div>'+
                     '</div>'+
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
-                        '<span class="input-group-addon">CC</span>'+
+                        '<span class="input-group-addon">'+lang.cc+'</span>'+
                         '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
                 '<div class="row">'+
                     '<div class="raza col-md-12 col-xs-12 col-sm-12">'+
-                        '<h4>Raza:</h4>'+
+                        '<h4>'+lang.raza+':</h4>'+
                     '</div>'+
                     '<div id="raza_option"class="col-md-12 col-xs-12 col-sm-12">'+
                         '<div class="btn-toolbar" role="toolbar">'+
@@ -324,7 +326,7 @@ function pantalla_3(){
                 '</div>'+
                 '<div class="row">'+
                     '<div id="higiene" class="col-md-6 col-xs-6 col-sm-6">'+
-                        '<h4>Higiene perineo</h4>'+
+                        '<h4>'+lang.higiene+'</h4>'+
                     '</div>'+
                     '<div class="col-md-6 col-xs-6 col-sm-6">'+
                         '<div id="perineo" class="btn-toolbar" role="toolbar">'+
@@ -345,13 +347,13 @@ function pantalla_3(){
                 '<div class="row">'+
                     '<div class="col-md-12 col-xs-12 col-sm-12">'+
                         '<div class="input-group input-group-sm" >'+
-                            '<span class="input-group-addon">Técnico</span>'+
+                            '<span class="input-group-addon">'+lang.tecnico+'</span>'+
                             '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+g_usuario[1]+'">'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
                     '<div class="col-md-12 col-xs-12 col-sm-12">'+
-                        '<button type="button" onclick="comienza_parto()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-time"></span><strong> Comienza Parto</strong></button>'+
+                        '<button type="button" onclick="comienza_parto()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-time"></span><strong> '+lang.comienza_parto+'</strong></button>'+
                     '</div>'+
                 '</div>'+
             '</div>'+
@@ -365,11 +367,11 @@ function pantalla_4(par_id,vac_id){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+                
-                '<h4><span class="glyphicon glyphicon-time"></span> | PARTO</h4>'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+                '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.parto+'</h4>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -377,14 +379,14 @@ function pantalla_4(par_id,vac_id){
                     '<div class="row">'+
                         '<div class="col-xs-8 col-sm-8 col-md-8">'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">ID Vaca</span>'+
-                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="4">'+
+                                '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
+                                '<input readonly type="text" value="'+vac_id+'" class="form-control" style="height: 37px;" placeholder="" maxlength="4">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
                         '<div id="higiene" class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<h4>Cant. Becerros</h4>'+
+                            '<h4>'+lang.cantidad_becerros+'</h4>'+
                         '</div>'+
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                             '<div id="perineo" class="btn-toolbar" role="toolbar">'+
@@ -404,7 +406,7 @@ function pantalla_4(par_id,vac_id){
                     '</div>'+
                     '<div class="row">'+
                         '<div class="raza col-xs-12 col-sm-12 col-md-12">'+
-                            '<h4>Dificultad:</h4>'+
+                            '<h4>'+lang.dificultad+':</h4>'+
                         '</div>'+
                         '<div id="raza_option"class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
@@ -431,7 +433,7 @@ function pantalla_4(par_id,vac_id){
                     '</div>'+
                     '<div class="row">'+
                         '<div class="raza col-xs-12 col-sm-12 col-md-12">'+
-                            '<h4>Raza:</h4>'+
+                            '<h4>'+lang.raza+':</h4>'+
                         '</div>'+
                         '<div id="raza_option"class="col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
@@ -464,10 +466,10 @@ function pantalla_4(par_id,vac_id){
                     '<div class="row">'+
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Técnico</span>'+
-                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="Nombre" value="'+g_usuario[1]+'">'+
+                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
+                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="" value="'+g_usuario[1]+'">'+
                             '</div>'+
-                            '<button type="button" onclick="fin_parto('+par_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> Listo!</button>'+
+                            '<button type="button" onclick="fin_parto('+par_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+lang.listo+'!</button>'+
                         '</div>'+
                     '</div>'+
                 '</form>'+
@@ -483,10 +485,10 @@ function pantalla_5(par_id,becerro){
     var html=''+
         '<div class="header row">'+
            '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                '<h4><img src="img/becerro4.png"/> | Becerro</h4>'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+                '<h4><img src="img/becerro4.png"/> | '+lang.becerro+'</h4>'+
             '</div>'+        
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
@@ -496,10 +498,10 @@ function pantalla_5(par_id,becerro){
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="gender" class="btn-group-justified" data-toggle="buttons">'+
                                     '<label name="lbl_bec_sexo" class="btn btn-default '+($.isArray(becerro)&&becerro[1]=='M'?'active':'')+'">'+
-                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="M" '+($.isArray(becerro)&&becerro[1]=='M'?'checked':'')+'>MACHO'+
+                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="M" '+($.isArray(becerro)&&becerro[1]=='M'?'checked':'')+'>'+lang.macho+''+
                                     '</label>'+ 
                                     '<label name="lbl_bec_sexo" class="btn btn-default '+($.isArray(becerro)&&becerro[1]=='H'?'active':'')+'">'+
-                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='H'?'checked':'')+'>HEMBRA'+
+                                        '<input name="bec_sexo" id="bec_sexo" type="radio" value="H" '+($.isArray(becerro)&&becerro[1]=='H'?'checked':'')+'>'+lang.hembra+''+
                                     '</label>'+
                                 '</div>'+ 
                             '</div>'+
@@ -510,19 +512,19 @@ function pantalla_5(par_id,becerro){
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="status_b" class="btn-group-justified" data-toggle="buttons">'+
                                     '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>V'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>'+lang.bec_cond_V+''+
                                     '</label>'+
-                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='ma'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="ma" '+($.isArray(becerro)&&becerro[2]=='ma'?'checked':'')+'>MA'+
+                                    '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
                                     '</label>'+
                                     '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>A'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>'+lang.bec_cond_A+''+
                                     '</label>'+
                                     '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
-                                    '<input id="bec_condicion" name="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>P'+
+                                    '<input id="bec_condicion" name="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>'+lang.bec_cond_P+''+
                                     '</label>'+
                                     '<label id="lbl_group7" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>M'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
                                     '</label>'+
                                 '</div>'+
                             '</div>'+
@@ -530,7 +532,7 @@ function pantalla_5(par_id,becerro){
                     '</div>'+
                     '<div class="row">'+
                         '<div id="higiene" class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<h4>Presentación</h4>'+
+                            '<h4>'+lang.presentacion+'</h4>'+
                         '</div>'+
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                             '<div id="perineo" class="btn-toolbar" role="toolbar">'+
@@ -551,14 +553,14 @@ function pantalla_5(par_id,becerro){
                     '<div class="row">'+
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">N°</span>'+
-                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="Caravana" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
+                                '<span class="input-group-addon">'+lang.caravana+'</span>'+
+                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Técnico</span>'+
-                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="Nombre" value="'+($.isArray(becerro)?becerro[5]:g_usuario[1])+'">'+
+                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
+                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[5]:g_usuario[1])+'">'+
                             '</div>'+
-                            '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[6]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?'Actualizar':'Agregar')+'</button>'+
+                            '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[6]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?lang.actualizar:lang.agregar)+'</button>'+
                         '</div>'+
                     '</div>'+
                 '</form>'+
@@ -576,11 +578,11 @@ function pantalla_6(bec_id,bec_caravana){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6">'+                
-                '<h4><img src="img/becerro4.png"/>| CALOSTRO</h4>'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+                '<h4><img src="img/becerro4.png"/> | '+lang.calostro+'</h4>'+
             '</div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> Volver</a></div>'+
+           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
@@ -588,33 +590,33 @@ function pantalla_6(bec_id,bec_caravana){
                     '<div class="row">'+
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">N°</span>'+
-                                '<input id="bec_caravana" name="bec_caravana" readonly type="text" class="form-control" placeholder="Número" value="'+bec_caravana+'">'+
+                                '<span class="input-group-addon">'+lang.caravana+'</span>'+
+                                '<input id="bec_caravana" name="bec_caravana" readonly type="text" class="form-control" placeholder="" value="'+bec_caravana+'">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Calidad</span>'+
+                                '<span class="input-group-addon">'+lang.calidad+'</span>'+
                                 '<input id="cal_calidad" name="cal_calidad" type="text" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Cantidad</span>'+
+                                '<span class="input-group-addon">'+lang.cantidad+'</span>'+
                                 '<input id="cal_cantidad" name="cal_cantidad" type="text" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Vigor</span>'+
+                                '<span class="input-group-addon">'+lang.vigor+'</span>'+
                                 '<input id="cal_vigor" name="cal_vigor" type="text" class="form-control" placeholder="">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Peso al nacer</span>'+
-                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="Kg" >'+
+                                '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
+                                '<input id="cal_peso" name="cal_peso" type="text" class="form-control" placeholder="" >'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">Técnico</span>'+
+                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
                                 '<input id="cal_tecnico" name="cal_tecnico" type="text" class="form-control" placeholder="Nombre" value="'+g_usuario[1]+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<button type="button" onclick="cargar_calostro('+bec_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> Listo!</button>'+
+                        '<button type="button" onclick="cargar_calostro('+bec_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+lang.listo+'!</button>'+
                     '</div>'+
                 '</form>'+
             '</div>'+
@@ -627,7 +629,7 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and bec_muerto<>"S" and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE bec_parto=par_id and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
@@ -649,23 +651,23 @@ function pantalla_7(){
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+                
+            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
                 '<h4><strong>Calving App</strong></h4>'+
-                '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm header_b" style="float:left;margin:6px 10px 0 0;">Sincronizar</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> Volver</strong></a></div>'+
+            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[2]+')&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></h4></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins">'+
                 '<div class="panel panel-default">'+
-                    '<div class="panel-heading">Becerros Activos: '+rs.rows.length+'</div>'+
+                    '<div class="panel-heading">'+lang.becerros_activos+': '+rs.rows.length+'</div>'+
                         '<table id="tabla_fix" class="table table-condensed">'+
                             '<thead>'+
                               '<tr>'+
-                                '<th>ID Vaca</th>'+
-                                '<th>Becerro</th>'+
-                                '<th>Hora</th>'+
-                                '<th>Fecha</th>'+
+                                '<th>'+lang.id_vaca+'</th>'+
+                                '<th>'+lang.becerro+'</th>'+
+                                '<th>'+lang.hora+'</th>'+
+                                '<th>'+lang.fecha+'</th>'+
                               '</tr>'+
                             '</thead>'+
                             '<tbody>'+             
@@ -675,12 +677,12 @@ function pantalla_7(){
                         '</div>'+
                         '<div class="functions_f">'+
                             '<div class="col-xs-5 col-sm-5 col-md-5">'+
-                               '<button onclick="marcar_muerto()" type="button" class="ready btn btn-primary btn-lg">MUERTO</span></button>'+
+                               '<button onclick="marcar_muerto()" type="button" class="ready btn btn-primary btn-lg">'+lang.muerto.toUpperCase()+'</span></button>'+
                                '<input type="hidden" name="bec_marcado" id="bec_marcado" value="">'+
                                '<input type="hidden" name="bec_nro_marcado" id="bec_nro_marcado" value="">'+
                             '</div>'+
                             '<div class="col-xs-5 col-sm-5 col-md-5">'+
-                              '<button onclick="marcar_calostro()" type="button" class="ready btn btn-primary btn-lg">CALOSTRO</button>'+
+                              '<button onclick="marcar_calostro()" type="button" class="ready btn btn-primary btn-lg">'+lang.calostro.toUpperCase()+'</button>'+
                             '</div>'+
                             '<div class="col-xs-2 col-sm-2 col-md-2">'+
                                '<button type="button" onclick="editar_becerro()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-pencil" style="border-bottom: white thin solid;"></span></button>'+
@@ -692,7 +694,7 @@ function pantalla_7(){
         '</div>';
     $('#app').html(html);
     $('#tabla_fix').fixheadertable({ 
-        height : 600
+        height : 150
     });
     $('#cargando_app').hide();
     })});
@@ -709,13 +711,15 @@ function comienza_parto(){
         values[4]=$('#par_higiene:checked').val();
         values[5]=$('#par_tecnico').val();
         values[6]=current_date();
+        values[7]=g_usuario[2];
         db.transaction(function(tx){tx.executeSql('select * from vacas WHERE vac_id=?', [values[0]], function(tx, rs) {
           if(!rs.rows.length) {
             db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
-            ultimo_movimiento();
+            ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
           }
-          db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha) VALUES ('"+values.join("','")+"')")});
-          ultimo_movimiento();
+          console.log("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')");
+          db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')")});
+          ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo) VALUES ('"+values.join("','")+"')");
           pantalla_2();
         })});
     }
@@ -732,7 +736,7 @@ function fin_parto(par_id){
         values[3]=$('#par_tecnico_becerros').val();
         values[4]=current_date();
         db.transaction(function(tx){tx.executeSql("update partos set par_becerros='"+values[0]+"', par_dificultad='"+values[1]+"', par_raza_becerros='"+values[2]+"', par_tecnico_becerros='"+values[3]+"', par_fecha_fin='"+values[4]+"' where par_id='"+par_id+"'")});
-        ultimo_movimiento();
+        ultimo_movimiento("update partos set par_becerros='"+values[0]+"', par_dificultad='"+values[1]+"', par_raza_becerros='"+values[2]+"', par_tecnico_becerros='"+values[3]+"', par_fecha_fin='"+values[4]+"' where par_id='"+par_id+"'");
         pantalla_5(par_id);
     }
     $('#cargando_app').hide();
@@ -751,13 +755,13 @@ function cargar_becerro(par_id,bec_id){
         values[6]=current_date();
         if(bec_id>0){
             db.transaction(function(tx){tx.executeSql("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'",[],function(tx,rs){
-                ultimo_movimiento();
+                ultimo_movimiento("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'");
                 pantalla_5(par_id)            
             })});
         }
         else{
             db.transaction(function(tx){tx.executeSql("insert into becerros (bec_parto,bec_sexo,bec_condicion,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
-                ultimo_movimiento();
+                ultimo_movimiento("insert into becerros (bec_parto,bec_sexo,bec_condicion,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')");
                 pantalla_5(par_id)            
             })});
         }
@@ -789,9 +793,9 @@ function mostrar_becerros(par_id,bec_id){
                 '<table id="activeb" class="table table-condensed">'+
                     '<thead>'+
                         '<tr>'+                             
-                            '<th>Becerro</th>'+
-                            '<th>Hora</th>'+
-                            '<th>Fecha</th>'+
+                            '<th>'+lang.caravana+'</th>'+
+                            '<th>'+lang.hora+'</th>'+
+                            '<th>'+lang.fecha+'</th>'+
                         '</tr>'+
                     '</thead>'+
                     '<tbody>'+becerros+
@@ -861,8 +865,11 @@ function datediff(fromDate,toDate,interval) {
     } 
 }
 
-function ultimo_movimiento(){
-    db.transaction(function(tx){tx.executeSql("update configuracion set cfg_ult_act_local='"+current_date()+"'")});
+function ultimo_movimiento(sql){
+    if(sql!=""){
+        db.transaction(function(tx){tx.executeSql("insert into movimientos (mov_sql) VALUES ('"+escape(sql)+"')")});
+        db.transaction(function(tx){tx.executeSql("update configuracion set cfg_ult_act_local='"+current_date()+"'")});    
+    }
 }
 
 function marcar_becerro(bec_id,bec_caravana){
@@ -881,8 +888,8 @@ function marcar_becerro(bec_id,bec_caravana){
 
 function marcar_muerto(){
     if($('#bec_marcado').val()!=""){
-        db.transaction(function(tx){tx.executeSql("update becerros set bec_muerto='S' where bec_id='"+$('#bec_marcado').val()+"'")});       
-        ultimo_movimiento();
+        db.transaction(function(tx){tx.executeSql("update becerros set bec_muerto='S', bec_fecha_muerto='"+current_date()+"' where bec_id='"+$('#bec_marcado').val()+"'")});       
+        ultimo_movimiento("update becerros set bec_muerto='S', bec_fecha_muerto='"+current_date()+"' where bec_id='"+$('#bec_marcado').val()+"'");
         pantalla_7();
     }
 }
@@ -911,7 +918,7 @@ function cargar_calostro(bec_id){
         values[5]=$('#cal_tecnico').val();
         values[6]=current_date();
         db.transaction(function(tx){tx.executeSql("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
-            ultimo_movimiento();
+            ultimo_movimiento("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha) VALUES ('"+values.join("','")+"')");
             pantalla_7();
         })});
     }
@@ -943,7 +950,7 @@ function obtener_becerro(bec_id){
 function buscar_actualizaciones(){
   if(navigator.onLine){
     db.transaction(function(tx){tx.executeSql('select * from configuracion', [], function(tx, rs) {
-      $.post('http://www.mobile-promotive.com.ar/uniohio/datos.php',{accion:'ultima_actualizacion',fecha:rs.rows.item(0).cfg_ult_sinc},function(res){
+      $.post(dir_datos+'datos.php',{accion:'ultima_actualizacion',fecha:rs.rows.item(0).cfg_ult_sinc},function(res){
         if(res!="NO"){
           actualizar();
         }
@@ -959,7 +966,12 @@ function buscar_actualizaciones(){
 }
 
 function actualizar(){
-    $('#actualizar').css('bottom','-100px');
+    html=''+
+        '<span>'+lang.msg_sincronizar+'&nbsp;&nbsp;&nbsp;<span>'+
+        '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm">'+lang.sincronizar+'</button>&nbsp;&nbsp;'+
+        '<button type="button" onclick="actualizar_cancelar()" class="btn btn-danger btn-sm">'+lang.cancelar+'</button>';
+    $('#actualizar').html(html);
+    $('#actualizar').css('bottom','-40px');
     $('#actualizar').show();
     $('#actualizar').animate({ bottom: '0' }, 500);    
 }
@@ -969,12 +981,18 @@ function actualizar_aceptar(){
 }
 
 function actualizar_cancelar(){
-    $('#actualizar').animate({ bottom: '-100' }, 500);
+    $('#actualizar').animate({ bottom: '-40' }, 500);
 }
 
 function soloNumeros(e){
     var key = window.Event ? e.which : e.keyCode
     return (key >= 48 && key <= 57)
+}
+
+function cambiar_idioma(idioma){
+    if(idioma=='es') lang=lang_es;
+    if(idioma=='en') lang=lang_en;    
+    verificar_base();
 }
 
 buscar_actualizaciones();

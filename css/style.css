@@ -1,14 +1,12 @@
 body {
 	background-color:#029e73;
 	background-image: none;
-	font-size: 30px;
 }
 .app {
 	background:none;
 	width: 100%;
 	height: 100%;
 	margin: 0;
-
 }
 .app li{
 	display: inline;
@@ -19,24 +17,6 @@ body {
 	padding-right: 1em;
 }
 
-.btn{
-	
-	font-size:50px;
-}
-
-.input-group-lg>.form-control{
-
-	height: 70px;
-	font-size: 30px;
-
-}
-
-.header_b{
-	font-size: 35px;
-}
-div.t_fixed_header.ui .body td:focus {
-	background-color: black;
-}
 /*-------------First Screen----------------*/
 .input-group-addon{
 	background-color: #07251c;
@@ -138,7 +118,6 @@ div.t_fixed_header.ui .body td:focus {
 
 }
 .panel-default>.panel-heading {
-	background-image:none;
 	text-align: left;
 	background-color: #07251c;
 	color: white;
@@ -193,6 +172,7 @@ tbody {
 	display: block;
 	margin-top: 0.5em;
 	padding-left: 2em;
+	font-size: 1.5em;
 }
 .functions .glyphicon:empty{
 	float: left;
@@ -238,7 +218,7 @@ tbody {
 /*-------------Third Screen----------------*/
 
 .raza h4 {
-	font-size: 30px;
+	font-size: 14px;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
@@ -251,7 +231,7 @@ tbody {
 
 }
 #higiene h4 {
-	font-size: 30px;
+	font-size: 14px;
 	text-align: left;
 	color: white;
 	padding-left: 1em;
@@ -288,16 +268,13 @@ tbody {
 }
 .input-group-sm>.input-group-addon{
 	padding-left: 1em;
-	font-size: 30px;
+	font-size: 14px;
 	text-transform: none;
 	border: none;
 }
 .input-group-sm>.form-control{
-	height: 60px;
-	font-size: 30px;
-}
-.btn-primary:hover, .btn-primary:focus {
-	background-position: 0;
+	height: 33px;
+	font-size: 14px;
 }
 
 /*-------------Forth Screen----------------*/
@@ -383,7 +360,7 @@ background-color: #771519;
 
 #notificacion {
 	width: 100%;
-	height: 100px;
+	height: 30px;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -410,7 +387,7 @@ background-color: #771519;
 	color: #fff;
 	text-align: right;
 	padding: 5px 10px 5px 0px;
-	height: 100px;
+	height: 40px;
 	background-color: rgba(0,0,0,.9);
 	display: none;
 }

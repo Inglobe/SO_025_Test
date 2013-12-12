@@ -150,7 +150,7 @@ div.t_fixed_header.ui .body tr {
 div.t_fixed_header.ui .body td {
 	padding			: 5px;
 	text-align 		: center;
-	line-height		: 80px;
+	line-height		: 15px;
 }
 
 div.t_fixed_header.ui .body tr:last-child td {

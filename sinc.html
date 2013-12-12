@@ -68,7 +68,7 @@ function descargar_tablas(db,tablas,index){
     var error = 0;
     $.ajax({
         type: "post",
-        url: "http://www.mobile-promotive.com.ar/uniohio/datos.php",
+        url: dir_datos+"datos.php",
         dataType: "text",
         data: { accion: "descargar_datos", tabla: tablas[indice], init:'no' },
         cache: false,
@@ -124,10 +124,7 @@ function descargar_tablas(db,tablas,index){
 
 function subir_bbdd(){
     var tablas=Array(
-        "vacas",
-        "partos",
-        "becerros",
-        "calostro"
+        "movimientos"
     );
     subir_tablas(db,tablas,0);
 }
@@ -144,7 +141,7 @@ function subir_tablas(db,tablas,index){
             }
         }
         $.ajax({
-            url: 'http://www.mobile-promotive.com.ar/uniohio/datos.php',
+            url: dir_datos+'datos.php',
             type: 'POST',
             data: {accion:'subir_datos',datos:registros,tabla:tablas[indice]},
             success: function(data){
