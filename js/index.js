@@ -707,8 +707,8 @@ function comienza_parto(){
         values[0]=$('#par_vaca').val();
         values[1]=$('#par_lactancia').val();
         values[2]=$('#par_cc').val();
-        values[3]=$('#par_vaca_raza:checked').val();
-        values[4]=$('#par_higiene:checked').val();
+        values[3]=document.querySelector('input[name="par_vaca_raza"]:checked').value;
+        values[4]=document.querySelector('input[name="par_higiene"]:checked').value
         values[5]=$('#par_tecnico').val();
         values[6]=current_date();
         values[7]=g_usuario[2];
@@ -729,9 +729,9 @@ function fin_parto(par_id){
     $('#cargando_app').show();    
     if(validar_formulario('frm_fin_parto','todos')){
         var values = new Array();
-        values[0]=$('#par_becerros:checked').val();
-        values[1]=$('#par_dificultad:checked').val();
-        values[2]=$('#par_raza_becerros:checked').val();
+        values[0]=document.querySelector('input[name="par_becerros"]:checked').value;
+        values[1]=document.querySelector('input[name="par_dificultad"]:checked').value;
+        values[2]=document.querySelector('input[name="par_raza_becerros"]:checked').value;
         values[3]=$('#par_tecnico_becerros').val();
         values[4]=current_date();
         db.transaction(function(tx){tx.executeSql("update partos set par_becerros='"+values[0]+"', par_dificultad='"+values[1]+"', par_raza_becerros='"+values[2]+"', par_tecnico_becerros='"+values[3]+"', par_fecha_fin='"+values[4]+"' where par_id='"+par_id+"'")});
@@ -746,9 +746,9 @@ function cargar_becerro(par_id,bec_id){
     if(validar_formulario('frm_cargar_becerro','todos')){
         var values = new Array();
         values[0]=par_id;
-        values[1]=$('#bec_sexo:checked').val();
-        values[2]=$('#bec_condicion:checked').val();
-        values[3]=$('#bec_presentacion:checked').val();
+        values[1]=document.querySelector('input[name="bec_sexo"]:checked').value;
+        values[2]=document.querySelector('input[name="bec_condicion"]:checked').value;
+        values[3]=document.querySelector('input[name="bec_presentacion"]:checked').value;
         values[4]=$('#bec_caravana').val();
         values[5]=$('#bec_tecnico').val();
         values[6]=current_date();
