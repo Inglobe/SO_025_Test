@@ -2,7 +2,7 @@
 <widget id="com.calving.calvingapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>CalvingApp</name>
     <description>
-       An app to take data from cows calving procedures.
+       An app for cows calving procedures.
     </description>
     <author email="ignacio@inglobe.com.ar" href="http://inglobe.com.ar">
         Inglobe Team
