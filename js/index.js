@@ -965,11 +965,11 @@ function buscar_actualizaciones(){
 
 function actualizar(){
     html=''+
-        '<span>'+lang.msg_sincronizar+'<span>'+
+        '<span style="font-size:20px;">'+lang.msg_sincronizar+'</span>&nbsp;&nbsp;'+
         '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-sm">'+lang.sincronizar+'</button>&nbsp;&nbsp;'+
         '<button type="button" onclick="actualizar_cancelar()" class="btn btn-danger btn-sm">'+lang.cancelar+'</button>';
     $('#actualizar').html(html);
-    $('#actualizar').css('bottom','-70px');
+    $('#actualizar').css('bottom','-100px');
     $('#actualizar').show();
     $('#actualizar').animate({ bottom: '0' }, 500);    
 }
@@ -979,7 +979,7 @@ function actualizar_aceptar(){
 }
 
 function actualizar_cancelar(){
-    $('#actualizar').animate({ bottom: '-70' }, 500);
+    $('#actualizar').animate({ bottom: '-100' }, 500);
 }
 
 function soloNumeros(e){

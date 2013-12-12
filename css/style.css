@@ -187,7 +187,7 @@ tbody {
 	display: block;
 	margin-top: 0.5em;
 	padding-left: 2em;
-	font-size: 1.5em;
+	font-size: 1em;
 }
 .functions .glyphicon:empty{
 	float: left;
@@ -401,7 +401,7 @@ background-color: #771519;
 	color: #fff;
 	text-align: right;
 	padding: 5px 10px 5px 0px;
-	height: 70px;
+	height: 100px;
 	background-color: rgba(0,0,0,.9);
 	display: none;
 }
