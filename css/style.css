@@ -327,14 +327,10 @@ tbody {
 }
 
 /*-------------Final Screen----------------*/
-.functions_f{
-	display: block;
-}
 
 .functions_f button{
 	display: block;
-	margin-top: 0.5em;	
-	font-size: 1em;
+
 }
 .functions_f .glyphicon{
 
