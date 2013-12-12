@@ -2,10 +2,10 @@
 <widget id="com.calving.calvingapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>CalvingApp</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+       An app to take data from cows calving procedures.
     </description>
-    <author email="dev@callback.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="ignacio@inglobe.com.ar" href="http://inglobe.com.ar">
+        Inglobe Team
     </author>
     <content src="index.html" />
     <preference name="phonegap-version"           value="3.1.0" />  
