@@ -381,7 +381,7 @@ function pantalla_4(par_id,vac_id){
                         '<div class="col-xs-8 col-sm-8 col-md-8">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                                '<input readonly type="text" value="'+vac_id+'" class="form-control" style="height: 37px;" placeholder="" maxlength="4">'+
+                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="4">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
