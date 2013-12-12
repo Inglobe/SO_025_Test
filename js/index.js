@@ -275,7 +275,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -283,13 +283,13 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.lactancia+'</span>'+
-                        '<input type="text" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia">'+
+                        '<input type="number" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia">'+
                       '</div>'+
                     '</div>'+
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
-                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
+                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
