@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
@@ -985,7 +985,7 @@ function actualizar_cancelar(){
 
 function soloNumeros(e){
     var key = window.Event ? e.which : e.keyCode
-    return (key >= 48 && key <= 57)
+    return (key >= 48 && key <= 57 || key == 46)
 }
 
 function cambiar_idioma(idioma){
