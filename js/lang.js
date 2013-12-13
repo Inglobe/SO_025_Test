@@ -1,4 +1,4 @@
-Cant. Becerrosvar lang_es = {
+var lang_es = {
 	usuario:'Usuario',
 	password:'Contraseña',
 	ingresar:'Ingresar',

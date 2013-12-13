@@ -990,7 +990,7 @@ function soloNumeros(e){
 
 function cambiar_idioma(idioma){
     if(idioma=='es') lang=lang_es;
-    if(idioma=='en') lang=lang_en;    
+    if(idioma=='en') lang=lang_en; 
     verificar_base();
 }
 
