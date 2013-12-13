@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
@@ -276,7 +276,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" ">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -290,7 +290,7 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
+                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" ">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -515,17 +515,17 @@ function pantalla_5(par_id,becerro){
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>'+lang.bec_cond_V+''+
                                     '</label>'+
-                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
                                     '</label>'+
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>'+lang.bec_cond_A+''+
                                     '</label>'+
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>'+lang.bec_cond_P+''+
-                                    '</label>'+
-                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
+                                    '</label>'+                                    
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
                                     '</label>'+
                                 '</div>'+
                             '</div>'+
@@ -555,7 +555,7 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
-                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
+                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
@@ -600,7 +600,7 @@ function pantalla_6(bec_id,bec_caravana){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
+                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
@@ -985,12 +985,12 @@ function actualizar_cancelar(){
 
 function soloNumeros(e){
     var key = window.Event ? e.which : e.keyCode
-    return (key >= 48 && key <= 57)
+    return (key >= 48 && key <= 57 || key == 46)
 }
 
 function cambiar_idioma(idioma){
     if(idioma=='es') lang=lang_es;
-    if(idioma=='en') lang=lang_en;    
+    if(idioma=='en') lang=lang_en; 
     verificar_base();
 }
 
