@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.calving.calvingapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>CalvingApp</name>
+    <description>
+       An app for cows calving procedures.
+    </description>
+    <author email="ignacio@inglobe.com.ar" href="http://inglobe.com.ar">
+        Inglobe Team
+    </author>
+    <content src="index.html" />
+    <preference name="phonegap-version"           value="3.1.0" />  
+    <access origin="*" />
+    <preference name="fullscreen" value="false" />
+    <preference name="webviewbounce" value="true" />
+    <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.file" />
+    <gap:plugin name="org.apache.cordova.network-information" />
+    <gap:plugin name="org.apache.cordova.file-transfer" />
+    <gap:plugin name="org.apache.cordova.splashscreen" />
+    <gap:splash src="img/splash.png" gap:platform="android" gap:density="ldpi" />
+    <gap:splash src="img/splash.png" gap:platform="android" gap:density="mdpi" />
+    <gap:splash src="img/splash.png" gap:platform="android" gap:density="hdpi" />
+
+</widget>
