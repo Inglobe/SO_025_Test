@@ -276,7 +276,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" onKeyPress="return soloNumeros(event)">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" ">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -290,7 +290,7 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" onKeyPress="return soloNumeros(event)">'+
+                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" ">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -555,7 +555,7 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-xs-12 col-sm-12 col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
-                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" onKeyPress="return soloNumeros(event)">'+
+                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
@@ -600,7 +600,7 @@ function pantalla_6(bec_id,bec_caravana){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" onKeyPress="return soloNumeros(event)">'+
+                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
