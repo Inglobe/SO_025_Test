@@ -209,7 +209,7 @@ function pantalla_2(){
                 }
                 partos=partos+''+
                     '<tr onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+
-                        '<td  width="50" height="35" style="background-color:'+css_back+';"></td>'+
+                        '<td  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
                         '<td>'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
