@@ -515,17 +515,17 @@ function pantalla_5(par_id,becerro){
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="v" '+($.isArray(becerro)&&becerro[2]=='v'?'checked':'')+'>'+lang.bec_cond_V+''+
                                     '</label>'+
-                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
                                     '</label>'+
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='a'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="a" '+($.isArray(becerro)&&becerro[2]=='a'?'checked':'')+'>'+lang.bec_cond_A+''+
                                     '</label>'+
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='p'?'active':'')+'">'+
                                     '<input name="bec_condicion" id="bec_condicion" type="radio" value="p" '+($.isArray(becerro)&&becerro[2]=='p'?'checked':'')+'>'+lang.bec_cond_P+''+
-                                    '</label>'+
-                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='m'?'active':'')+'">'+
-                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="m" '+($.isArray(becerro)&&becerro[2]=='m'?'checked':'')+'>'+lang.bec_cond_M+''+
+                                    '</label>'+                                    
+                                    '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='mf'?'active':'')+'">'+
+                                    '<input name="bec_condicion" id="bec_condicion" type="radio" value="mf" '+($.isArray(becerro)&&becerro[2]=='mf'?'checked':'')+'>'+lang.bec_cond_MF+''+
                                     '</label>'+
                                 '</div>'+
                             '</div>'+

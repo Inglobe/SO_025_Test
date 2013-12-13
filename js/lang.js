@@ -1,4 +1,4 @@
-var lang_es = {
+Cant. Becerrosvar lang_es = {
 	usuario:'Usuario',
 	password:'Contraseña',
 	ingresar:'Ingresar',
@@ -37,7 +37,7 @@ var lang_es = {
 	msg_validad_form:'Complete todo los datos',
 	salir:'Salir',
 	volver:'Volver',
-	cantidad_becerros:'Cant. Becerros',
+	cantidad_becerros:'Becerros',
 	actualizar:'Actualizar',
 	agregar:'Agregar',
 	bec_cond_V:'V',
@@ -86,7 +86,7 @@ var lang_en = {
 	msg_validad_form:'Complete all data',
 	salir:'Exit',
 	volver:'Back',
-	cantidad_becerros:'Qty. Becerros',
+	cantidad_becerros:'Calves',
 	actualizar:'Update',
 	agregar:'Add',
 	bec_cond_V:'A',
