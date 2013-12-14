@@ -208,11 +208,11 @@ function pantalla_2(){
                     css_back='green';
                 }
                 partos=partos+''+
-                    '<tr onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+
-                        '<td  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
-                        '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
-                        '<td>'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
-                        '<td>'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
+                    '<tr>'+
+                        '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
                     '</tr>';
             }
         }
@@ -259,7 +259,7 @@ function pantalla_2(){
 }
 
 /* Pantalla 3 */
-function pantalla_3(){
+function pantalla_3(parto){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
@@ -276,7 +276,7 @@ function pantalla_3(){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" ">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" value="'+($.isArray(parto)?parto[0]:'')+'">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -284,13 +284,13 @@ function pantalla_3(){
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.lactancia+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia">'+
+                        '<input type="number" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia" value="'+($.isArray(parto)?parto[1]:'')+'">'+
                       '</div>'+
                     '</div>'+
                     '<div class="col-xs-6 col-sm-6 col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" ">'+
+                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" value="'+($.isArray(parto)?parto[2]:'')+'">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -301,26 +301,26 @@ function pantalla_3(){
                     '<div id="raza_option"class="col-md-12 col-xs-12 col-sm-12">'+
                         '<div class="btn-toolbar" role="toolbar">'+
                             '<div class="btn-group-justified" data-toggle="buttons">'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="h">H'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='h'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="h" '+($.isArray(parto)&&parto[3]=='h'?'checked':'')+'>H'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="j">J'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='j'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="j" '+($.isArray(parto)&&parto[3]=='j'?'checked':'')+'>J'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="x">X'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='x'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="x" '+($.isArray(parto)&&parto[3]=='x'?'checked':'')+'>X'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="b">B'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='b'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="b" '+($.isArray(parto)&&parto[3]=='b'?'checked':'')+'>B'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="r">R'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='r'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="r" '+($.isArray(parto)&&parto[3]=='r'?'checked':'')+'>R'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="g">G'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='g'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="g" '+($.isArray(parto)&&parto[3]=='g'?'checked':'')+'>G'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value=".">.'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='.'?'active':'')+'">'+
+                                '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="." '+($.isArray(parto)&&parto[3]=='.'?'checked':'')+'>.'+
                                 '</label>'+
                             '</div>'+
                         '</div>'+
@@ -333,14 +333,14 @@ function pantalla_3(){
                     '<div class="col-md-6 col-xs-6 col-sm-6">'+
                         '<div id="perineo" class="btn-toolbar" role="toolbar">'+
                             '<div class="btn-group-justified" data-toggle="buttons">'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="1">1</button>'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='1'?'active':'')+'">'+
+                                '<input name="par_higiene" id="par_higiene" type="radio" value="1" '+($.isArray(parto)&&parto[4]=='1'?'checked':'')+'>1</button>'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="2">2</button>'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='2'?'active':'')+'">'+
+                                '<input name="par_higiene" id="par_higiene" type="radio" value="2" '+($.isArray(parto)&&parto[4]=='2'?'checked':'')+'>2</button>'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="3">3</button>'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='3'?'active':'')+'">'+
+                                '<input name="par_higiene" id="par_higiene" type="radio" value="3" '+($.isArray(parto)&&parto[4]=='3'?'checked':'')+'>3</button>'+
                                 '</label>'+
                             '</div>'+
                         '</div>'+
@@ -350,12 +350,12 @@ function pantalla_3(){
                     '<div class="col-md-12 col-xs-12 col-sm-12">'+
                         '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+g_usuario[1]+'">'+
+                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+($.isArray(parto)?parto[5]:g_usuario[1])+'">'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
                     '<div class="col-md-12 col-xs-12 col-sm-12">'+
-                        '<button type="button" onclick="comienza_parto()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-time"></span><strong> '+lang.comienza_parto+'</strong></button>'+
+                        '<button type="button" onclick="comienza_parto('+($.isArray(parto)?parto[6]:0)+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-time"></span><strong> '+($.isArray(parto)?lang.actualizar:lang.comienza_parto)+'</strong></button>'+
                     '</div>'+
                 '</div>'+
             '</div>'+
@@ -701,7 +701,7 @@ function pantalla_7(){
     })});
 }
 
-function comienza_parto(){
+function comienza_parto(par_id){
     $('#cargando_app').show();    
     if(validar_formulario('frm_comienzo_parto','todos')){
         var values = new Array();
@@ -715,13 +715,21 @@ function comienza_parto(){
         values[7]=g_usuario[2];
         values[8]=g_usuario[3];
         db.transaction(function(tx){tx.executeSql('select * from vacas WHERE vac_id=?', [values[0]], function(tx, rs) {
-          if(!rs.rows.length) {
-            db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
-            ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
-          }
-          db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')")});
-          ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')");
-          pantalla_2();
+            if(!rs.rows.length) {
+                db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
+                ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
+            }
+            if(par_id>0){
+                db.transaction(function(tx){tx.executeSql("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"' where par_id='"+par_id+"'",[],function(tx,rs){
+                    ultimo_movimiento("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"' where par_id='"+par_id+"'");
+                    pantalla_2();
+                })});
+                }
+            else{
+                db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')")});
+                ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')");
+                pantalla_2();
+            }
         })});
     }
     $('#cargando_app').hide();
@@ -937,6 +945,25 @@ function obtener_becerro(bec_id){
             becerro[5]=rs.rows.item(0).bec_tecnico;
             becerro[6]=rs.rows.item(0).bec_id;
             pantalla_5(rs.rows.item(0).bec_parto,becerro);
+        }
+        else{
+            return false;
+        }
+    })});
+}
+
+function obtener_parto(par_id){
+    db.transaction(function(tx){tx.executeSql('select  * from partos where par_id=?', [par_id], function(tx, rs) {
+        if(rs.rows.length){
+            parto=Array();
+            parto[0]=rs.rows.item(0).par_vaca;
+            parto[1]=rs.rows.item(0).par_lactancia;
+            parto[2]=rs.rows.item(0).par_cc;
+            parto[3]=rs.rows.item(0).par_vaca_raza;
+            parto[4]=rs.rows.item(0).par_higiene;
+            parto[5]=rs.rows.item(0).par_tecnico;
+            parto[6]=rs.rows.item(0).par_id;
+            pantalla_3(parto);
         }
         else{
             return false;
