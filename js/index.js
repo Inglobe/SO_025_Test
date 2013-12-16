@@ -23,6 +23,10 @@ var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
 for(i=0;i<10;i++) g_usuario[i]='';
+/*g_usuario[0]='mabatidaga';
+g_usuario[1]='Mauro';
+g_usuario[2]=1;
+g_usuario[3]='Rodeo 1';*/
 
 var app = {
     // Application Constructor
@@ -212,7 +216,7 @@ function pantalla_2(){
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
                         '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(0,5)+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
                     '</tr>';
             }
         }
@@ -646,7 +650,7 @@ function pantalla_7(){
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td valign="middle">'+rs.rows.item(i).bec_caravana+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(11,16)+'</td>'+
-                        '<td>'+rs.rows.item(i).bec_fecha.substring(0,5)+'</td>'+
+                        '<td>'+rs.rows.item(i).bec_fecha.substring(3,5)+'/'+rs.rows.item(i).bec_fecha.substring(0,2)+'</td>'+
                     '</tr>';
             }
         }
@@ -853,8 +857,8 @@ function current_date(){
 
 function datediff(fromDate,toDate,interval) { 
     var second=1000, minute=second*60, hour=minute*60, day=hour*24, week=day*7; 
-    fromDate = new Date(fromDate); 
-    toDate = new Date(toDate); 
+    fromDate = new Date(dateFormat(fromDate)); 
+    toDate = new Date(dateFormat(toDate)); 
     var timediff = toDate - fromDate; 
     if (isNaN(timediff)) return NaN; 
     switch (interval) { 
@@ -871,6 +875,10 @@ function datediff(fromDate,toDate,interval) {
         case "seconds": return Math.floor(timediff / second); 
         default: return undefined; 
     } 
+}
+
+function dateFormat(fecha) {
+    return fecha.substring(3,5)+'-'+fecha.substring(0,2)+'-'+fecha.substring(6,10)+' '+fecha.substring(11,19);
 }
 
 function ultimo_movimiento(sql){
