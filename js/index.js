@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
@@ -214,9 +214,9 @@ function pantalla_2(){
                 partos=partos+''+
                     '<tr>'+
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+','+rs.rows.item(i).par_vaca+')">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
+                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
                     '</tr>';
             }
         }
@@ -280,7 +280,7 @@ function pantalla_3(parto){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="4" value="'+($.isArray(parto)?parto[0]:'')+'">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="5" value="'+($.isArray(parto)?parto[0]:'')+'">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -386,7 +386,7 @@ function pantalla_4(par_id,vac_id){
                         '<div class="col-xs-8 col-sm-8 col-md-8">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="4">'+
+                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="5">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
