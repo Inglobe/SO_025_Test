@@ -277,7 +277,7 @@ function pantalla_3(parto){
             '<form id="frm_comienzo_parto" action="">'+ 
                 '<div class="margins">'+
                     '<div class="row">'+
-                        '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                        '<div class="col-xs-8 col-sm-8 col-md-8">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
                             '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="5" value="'+($.isArray(parto)?parto[0]:'')+'">'+
@@ -383,7 +383,7 @@ function pantalla_4(par_id,vac_id){
             '<div class="margins_small">'+
                 '<form id="frm_fin_parto" action="">'+
                     '<div class="row">'+
-                        '<div class="col-xs-9 col-sm-9 col-md-9">'+
+                        '<div class="col-xs-10 col-sm-10 col-md-10">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
                                 '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="5">'+
