@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/'; /* agregar /dev/ para version testing*/
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
@@ -846,7 +846,7 @@ function validar_formulario(form,campos){
 
 function current_date(){
     var today = new Date();
-    var month = today.getMonth()+1<10?'0'+today.getMonth()+1:today.getMonth()+1;
+    var month = today.getMonth()+1<10?'0'+(today.getMonth()+1):(today.getMonth()+1);
     var day = today.getDate()<10?'0'+today.getDate():today.getDate();
     var year = today.getFullYear();
     var cHour = today.getHours()<10?'0'+today.getHours():today.getHours();
