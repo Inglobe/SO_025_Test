@@ -18,15 +18,15 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/'; /* agregar /dev/ para version testing*/
+var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
 for(i=0;i<10;i++) g_usuario[i]='';
 /*g_usuario[0]='mabatidaga';
 g_usuario[1]='Mauro';
-g_usuario[2]=1;
-g_usuario[3]='Rodeo 1';*/
+g_usuario[2]=2;
+g_usuario[3]='Rodeo 2';*/
 
 var app = {
     // Application Constructor
@@ -280,7 +280,7 @@ function pantalla_3(parto){
                         '<div class="col-xs-6 col-sm-6 col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" maxlength="5" value="'+($.isArray(parto)?parto[0]:'')+'">'+
+                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" value="'+($.isArray(parto)?parto[0]:'')+'">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+  
@@ -386,7 +386,7 @@ function pantalla_4(par_id,vac_id){
                         '<div class="col-xs-8 col-sm-8 col-md-8">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" maxlength="5">'+
+                                '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" >'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -634,19 +634,19 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros, partos WHERE par_rodeo="'+g_usuario[2]+'" and bec_parto=par_id and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and bec_id NOT IN (select cal_becerro FROM calostro where cal_becerro=bec_id) ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros left join partos ON (bec_parto=par_id) left join calostro ON (bec_id=cal_becerro) WHERE par_rodeo="'+g_usuario[2]+'" and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and (julianday()-julianday(Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))))<1 ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
-                if(diff > 240){
-                    css_back='red';
-                }else if(diff > 120){
-                    css_back='orange';
-                }else{
-                    css_back='green';
+                marcar='onclick="marcar_becerro('+rs.rows.item(i).bec_id+',\''+rs.rows.item(i).bec_caravana+'\')"';
+                if(!rs.rows.item(i).cal_id){
+                    style='style="color:#000"';
+                }
+                else{
+                    style='style="background-color:#F7BE81"';
                 }
                 becerros=becerros+''+
-                    '<tr onclick="marcar_becerro('+rs.rows.item(i).bec_id+',\''+rs.rows.item(i).bec_caravana+'\')" id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
+                    '<tr '+marcar+' '+style+' id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td valign="middle">'+rs.rows.item(i).bec_caravana+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(11,16)+'</td>'+
