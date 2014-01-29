@@ -634,7 +634,7 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros left join partos ON (bec_parto=par_id) left join calostro ON (bec_id=cal_becerro) WHERE par_rodeo="'+g_usuario[2]+'" and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and (julianday(\'now\',\'-3 hours\')-julianday(Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))))<1 ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select * from becerros left join partos ON (bec_parto=par_id) left join calostro ON (bec_id=cal_becerro) WHERE par_rodeo="'+g_usuario[2]+'" and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and (julianday(\'now\',\'localtime\')-julianday(Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))))<1 ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
