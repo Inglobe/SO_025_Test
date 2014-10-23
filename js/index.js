@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://www.mobile-promotive.com.ar/uniohio/';
+var dir_datos = 'http://ohio.inglobe.com.ar/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 var g_usuario=Array();
