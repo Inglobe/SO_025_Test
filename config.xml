@@ -8,7 +8,7 @@
         Inglobe Team
     </author>
     <content src="index.html" />
-    <preference name="phonegap-version"           value="3.6.3" />  
+    <preference name="phonegap-version" value="3.6.3" />  
     <access origin="*" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
@@ -17,5 +17,6 @@
     <gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />
     <gap:plugin name="org.apache.cordova.network-information" version="0.2.12" />
     <gap:plugin name="org.apache.cordova.splashscreen" version="0.3.3" />
+    <icon src="img/logo_b.png" />
 
 </widget>
