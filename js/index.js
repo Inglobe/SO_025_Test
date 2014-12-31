@@ -21,12 +21,6 @@
 var dir_datos = 'http://ohio.inglobe.com.ar/dev/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
-var g_usuario=Array();
-for(i=0;i<10;i++) g_usuario[i]='';
-/*g_usuario[0]='mabatidaga';
-g_usuario[1]='Mauro';
-g_usuario[2]=2;
-g_usuario[3]='Rodeo 2';*/
 
 var app = {
     // Application Constructor
@@ -142,24 +136,31 @@ function descargar_tablas_init(db,tablas,index){
 
 /* Pantalla Login (HTML) */
 function pantalla_login(){
-    html='<div class="container">'+
-            '<div id="lang" style="margin-top:2%;">'+
-                '<h4><a><img onclick="cambiar_idioma(\'en\')" class="english" src="img/fondo.png" /></a></h4>'+
-                '<h4><a><img onclick="cambiar_idioma(\'es\')" class="espanol" src="img/fondo.png" /></a></h4>'+
-            '</div>'+
-            '<div id="logo"><img src="img/logo.png"/></div>'+
-            '<div class="input-group input-group-lg loginscreen" >'+
-              '<span class="input-group-addon" id="home-ico"><span class="glyphicon glyphicon-user"></span></span>'+
-              '<input id="usu_codigo" type="text" class="form-control" placeholder="'+lang.usuario+'">'+
-            '</div>'+
-            '<div class="input-group input-group-lg">'+
-              '<span class="input-group-addon" id="lock-ico"><span class="glyphicon glyphicon-lock"></span></span>'+
-              '<input id="usu_password" type="password" class="form-control" placeholder="'+lang.password+'">'+
-            '</div>'+
-            '<button id="login" type="button" onclick="login()" class="btn btn-primary btn-lg">'+lang.ingresar+'</button>'+
-        '</div>';
-    $('#app').html(html);
-    $('#cargando').hide();
+    if(!localStorage.usu_codigo){
+        html='<div class="container">'+
+                '<div id="lang" style="margin-top:2%;">'+
+                    '<h4><a><img onclick="cambiar_idioma(\'en\')" class="english" src="img/fondo.png" /></a></h4>'+
+                    '<h4><a><img onclick="cambiar_idioma(\'es\')" class="espanol" src="img/fondo.png" /></a></h4>'+
+                '</div>'+
+                '<div id="logo"><img src="img/logo.png"/></div>'+
+                '<div class="input-group input-group-lg loginscreen" >'+
+                  '<span class="input-group-addon" id="home-ico"><span class="glyphicon glyphicon-user"></span></span>'+
+                  '<input id="usu_codigo" type="text" class="form-control" placeholder="'+lang.usuario+'">'+
+                '</div>'+
+                '<div class="input-group input-group-lg">'+
+                  '<span class="input-group-addon" id="lock-ico"><span class="glyphicon glyphicon-lock"></span></span>'+
+                  '<input id="usu_password" type="password" class="form-control" placeholder="'+lang.password+'">'+
+                '</div>'+
+                '<button id="ingresar" style="display:block;width:100%;margin-bottom:10px" type="button" onclick="login()" class="btn btn-inverse btn-lg">'+lang.ingresar+'</button>'+
+                '<button id="registrar" style="display:block;width:100%" type="button" onclick="window.open(\'http://www.ecalvin.com\',\'_blank\')" class="btn btn-success btn-lg">'+lang.registrar+'</button>'+
+            '</div>';
+        $('#app').html(html);
+        $('#cargando').hide();
+    }
+    else{
+        $('#cargando').hide();
+        pantalla_2();                    
+    }
 }
 
 /* Acceso de usuarios */
@@ -170,16 +171,25 @@ function login(){
         $('#cargando_app').show();
         db.transaction(function(tx){tx.executeSql('select * from usuarios WHERE usu_codigo=? AND usu_password=?', [usu,pass], function(tx, rs) {
           if(rs.rows.length) {
-            g_usuario[0]=rs.rows.item(0).usu_codigo;
-            g_usuario[1]=rs.rows.item(0).usu_nombre;
-            g_usuario[2]=rs.rows.item(0).usu_rodeo;
-            g_usuario[3]=rs.rows.item(0).usu_rodeo_desc;
+            localStorage.usu_codigo=rs.rows.item(0).usu_codigo;
+            localStorage.usu_nombre=rs.rows.item(0).usu_nombre;
+            localStorage.usu_rodeo=rs.rows.item(0).usu_rodeo;
+            localStorage.usu_rodeo_desc=rs.rows.item(0).usu_rodeo_desc;            
             pantalla_2();            
           }else{
             notificacion("Datos iconrrectos, intente nuevamente.","error");            
           }
         })});        
     }
+}
+
+/* Logout */
+function logout(){
+    localStorage.removeItem("usu_codigo");
+    localStorage.removeItem("usu_nombre");
+    localStorage.removeItem("usu_rodeo");
+    localStorage.removeItem("usu_rodeo_desc");            
+    pantalla_login();
 }
 
 /* Mostrar notificaciones de sistema */
@@ -200,7 +210,7 @@ function notificacion(texto,clase){
 function pantalla_2(){
     $('#cargando_app').show();
     var partos='';
-    db.transaction(function(tx){tx.executeSql('select * from partos WHERE par_rodeo="'+g_usuario[2]+'" and (par_becerros is null or par_becerros = 0) ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin, count(bec_id) as cantbec from partos a left join becerros b ON (a.par_id=b.bec_parto) WHERE a.par_rodeo="'+localStorage.usu_rodeo+'" group by a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin having count(bec_id)<ifnull((case a.par_becerros when 0 then null else a.par_becerros end),"-1") ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).par_fecha,current_date(),'minutes');
@@ -214,22 +224,22 @@ function pantalla_2(){
                 partos=partos+''+
                     '<tr>'+
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
-                        '<td onclick="pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
                     '</tr>';
             }
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<div class="col-md-6">'+
             '<h4><strong>Calving App</strong></h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a style="color:red;" href="javascript:pantalla_login()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></div>'+
+            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a style="color:red;" href="javascript:logout()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
-        '<div class="margins">'+
+        '<div class="margins_small">'+
         '<div class="panel panel-default">'+
           '<div class="panel-heading">'+lang.vacas_activas+': '+rs.rows.length+'</div>'+
           '<div id="tableContainer" class="tableContainer">'+
@@ -249,8 +259,9 @@ function pantalla_2(){
            '</div>'+
         '</div>'+
         '<div class="functions">'+
-            '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span>'+lang.nuevo_parto+'</button>'+
+            '<button type="button" onclick="pantalla_3()" class="addcow btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign" style="top:9px"></span>'+lang.nuevo_parto+'</button>'+
             '<button id="becerro" onclick="pantalla_7()" type="submit" class="btn btn-primary btn-lg"><img style="margin-top:-5px" src="img/becerro.png">'+lang.becerros+'</button>'+
+            '<button style="width:100%;text-align:left" onclick="pantalla_8()" type="submit" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-time" style="top:9px"></span>'+lang.vacas_frescas+'</button>'+
         '</div>'+
         '</div>'+
         '</div>';
@@ -267,31 +278,39 @@ function pantalla_3(parto){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<div class="col-md-6">'+
             '<h4><img src="img/vaca.png"/> | <strong>'+lang.info_vaca+'</strong></h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
+            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
             '<form id="frm_comienzo_parto" action="">'+ 
-                '<div class="margins">'+
+                '<div class="margins_small">'+
                     '<div class="row">'+
-                        '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                        '<div class="col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
                             '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" value="'+($.isArray(parto)?parto[0]:'')+'">'+
                           '</div>'+
                         '</div>'+
-                    '</div>'+  
+                    '</div>'+
                     '<div class="row">'+
-                    '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.corral+'</span>'+
+                                '<input type="text" name="par_corral" id="par_corral" class="form-control" placeholder="" value="'+($.isArray(parto)?parto[7]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.lactancia+'</span>'+
                         '<input type="number" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia" value="'+($.isArray(parto)?parto[1]:'')+'">'+
                       '</div>'+
                     '</div>'+
-                    '<div class="col-xs-6 col-sm-6 col-md-6">'+
+                    '<div class="col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
                         '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" value="'+($.isArray(parto)?parto[2]:'')+'">'+
@@ -299,10 +318,10 @@ function pantalla_3(parto){
                     '</div>'+
                 '</div>'+
                 '<div class="row">'+
-                    '<div class="raza col-md-12 col-xs-12 col-sm-12">'+
-                        '<h4>'+lang.raza+':</h4>'+
+                    '<div class="raza col-md-12" style="margin-bottom:10px">'+
+                        '<h4>'+lang.raza+'</h4>'+
                     '</div>'+
-                    '<div id="raza_option"class="col-md-12 col-xs-12 col-sm-12">'+
+                    '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
                         '<div class="btn-toolbar" role="toolbar">'+
                             '<div class="btn-group-justified" data-toggle="buttons">'+
                                 '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='h'?'active':'')+'">'+
@@ -331,34 +350,42 @@ function pantalla_3(parto){
                     '</div>'+
                 '</div>'+
                 '<div class="row">'+
-                    '<div id="higiene" class="col-md-6 col-xs-6 col-sm-6">'+
-                        '<h4>'+lang.higiene+'</h4>'+
-                    '</div>'+
-                    '<div class="col-md-6 col-xs-6 col-sm-6">'+
-                        '<div id="perineo" class="btn-toolbar" role="toolbar">'+
-                            '<div class="btn-group-justified" data-toggle="buttons">'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='1'?'active':'')+'">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="1" '+($.isArray(parto)&&parto[4]=='1'?'checked':'')+'>1</button>'+
-                                '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='2'?'active':'')+'">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="2" '+($.isArray(parto)&&parto[4]=='2'?'checked':'')+'>2</button>'+
-                                '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='3'?'active':'')+'">'+
-                                '<input name="par_higiene" id="par_higiene" type="radio" value="3" '+($.isArray(parto)&&parto[4]=='3'?'checked':'')+'>3</button>'+
-                                '</label>'+
+                    '<div class="col-md-12">'+
+                        '<div class="input-group input-group-sm" >'+
+                            '<span class="input-group-addon">'+lang.higiene+'</span>'+
+                            '<div id="perineo" class="btn-toolbar" role="toolbar">'+
+                                '<div class="btn-group-justified" data-toggle="buttons">'+
+                                    '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='1'?'active':'')+'">'+
+                                        '<input name="par_higiene" id="par_higiene" type="radio" value="1" '+($.isArray(parto)&&parto[4]=='1'?'checked':'')+'>1</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='2'?'active':'')+'">'+
+                                        '<input name="par_higiene" id="par_higiene" type="radio" value="2" '+($.isArray(parto)&&parto[4]=='2'?'checked':'')+'>2</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+($.isArray(parto)&&parto[4]=='3'?'active':'')+'">'+
+                                        '<input name="par_higiene" id="par_higiene" type="radio" value="3" '+($.isArray(parto)&&parto[4]=='3'?'checked':'')+'>3</button>'+
+                                    '</label>'+
+                                '</div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
                 '<div class="row">'+
-                    '<div class="col-md-12 col-xs-12 col-sm-12">'+
+                    '<div class="col-md-12">'+
+                        '<div class="input-group input-group-sm" >'+
+                            '<span class="input-group-addon">'+lang.notas+'</span>'+
+                            '<textarea class="form-control" placeholder="" name="par_observaciones" id="par_observaciones" rows="4" style="height:auto">'+($.isArray(parto)?parto[8]:'')+'</textarea>'+
+                        '</div>'+
+                    '</div>'+                    
+                '</div>'+
+                '<div class="row">'+
+                    '<div class="col-md-12">'+
                         '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+($.isArray(parto)?parto[5]:g_usuario[1])+'">'+
+                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+($.isArray(parto)?parto[5]:localStorage.usu_nombre)+'">'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                    '<div class="col-md-12 col-xs-12 col-sm-12">'+
+                    '<div class="col-md-12">'+
                         '<button type="button" onclick="comienza_parto('+($.isArray(parto)?parto[6]:0)+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-time"></span><strong> '+($.isArray(parto)?lang.actualizar:lang.comienza_parto)+'</strong></button>'+
                     '</div>'+
                 '</div>'+
@@ -373,17 +400,17 @@ function pantalla_4(par_id,vac_id){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<div class="col-md-6">'+
             '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.parto+'</h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
+            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
                 '<form id="frm_fin_parto" action="">'+
                     '<div class="row">'+
-                        '<div class="col-xs-8 col-sm-8 col-md-8">'+
+                        '<div class="col-md-8">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
                                 '<input readonly type="text" value="'+vac_id+'" class="form-control" placeholder="" >'+
@@ -391,30 +418,32 @@ function pantalla_4(par_id,vac_id){
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<div id="higiene" class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<h4>'+lang.cantidad_becerros+'</h4>'+
-                        '</div>'+
-                        '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<div id="perineo" class="btn-toolbar" role="toolbar">'+
-                                '<div class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label class="btn btn-default">'+
-                                    '<input name="par_becerros" id="par_becerros" type="radio" value="1">1</button>'+
-                                    '</label>'+
-                                    '<label class="btn btn-default">'+
-                                    '<input name="par_becerros" id="par_becerros" type="radio" value="2">2</button>'+
-                                    '</label>'+
-                                    '<label class="btn btn-default">'+
-                                    '<input name="par_becerros" id="par_becerros" type="radio" value="3">3</button>'+
-                                    '</label>'+
-                                '</div>'+
-                            '</div>'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.cantidad_becerros+'</span>'+
+                                '<div class="col-md-6">'+
+                                    '<div id="perineo" class="btn-toolbar" role="toolbar">'+
+                                        '<div class="btn-group-justified" data-toggle="buttons">'+
+                                            '<label class="btn btn-default">'+
+                                            '<input name="par_becerros" id="par_becerros" type="radio" value="1">1</button>'+
+                                            '</label>'+
+                                            '<label class="btn btn-default">'+
+                                            '<input name="par_becerros" id="par_becerros" type="radio" value="2">2</button>'+
+                                            '</label>'+
+                                            '<label class="btn btn-default">'+
+                                            '<input name="par_becerros" id="par_becerros" type="radio" value="3">3</button>'+
+                                            '</label>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+                  
+                            '</div>'+                  
                         '</div>'+                  
                     '</div>'+
                     '<div class="row">'+
-                        '<div class="raza col-xs-12 col-sm-12 col-md-12">'+
-                            '<h4>'+lang.dificultad+':</h4>'+
+                        '<div class="raza col-md-12" style="margin-bottom:10px">'+
+                            '<h4>'+lang.dificultad+'</h4>'+
                         '</div>'+
-                        '<div id="raza_option"class="col-xs-12 col-sm-12 col-md-12">'+
+                        '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div class="btn-group-justified" data-toggle="buttons">'+
                                     '<label class="btn btn-default">'+
@@ -437,10 +466,10 @@ function pantalla_4(par_id,vac_id){
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<div class="raza col-xs-12 col-sm-12 col-md-12">'+
-                            '<h4>'+lang.raza+':</h4>'+
+                        '<div class="raza col-md-12" style="margin-bottom:10px">'+
+                            '<h4>'+lang.raza+'</h4>'+
                         '</div>'+
-                        '<div id="raza_option"class="col-md-12">'+
+                        '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div class="btn-group-justified" data-toggle="buttons">'+
                                     '<label class="btn btn-default">'+
@@ -463,16 +492,16 @@ function pantalla_4(par_id,vac_id){
                                         '</label>'+
                                         '<label class="btn btn-default">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value=".">.'+
-                                        '</label>'+
-                                    '</div>'+
+                                    '</label>'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
+                    '</div>'+
                     '<div class="row">'+
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="" value="'+g_usuario[1]+'">'+
+                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="" value="'+localStorage.usu_nombre+'">'+
                             '</div>'+
                             '<button type="button" onclick="fin_parto('+par_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+lang.listo+'!</button>'+
                         '</div>'+
@@ -489,17 +518,17 @@ function pantalla_5(par_id,becerro){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+           '<div class="col-md-6">'+
             '<h4><img src="img/becerro4.png"/> | '+lang.becerro+'</h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+        
             '</div>'+        
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
+           '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
         '<div class="container">'+
             '<div class="margins_small">'+
                 '<form id="frm_cargar_becerro" action="">'+
                     '<div class="row">'+
-                        '<div class="col-xs-12 col-sm-12 col-md-12">'+
+                        '<div class="col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="gender" class="btn-group-justified" data-toggle="buttons">'+
                                     '<label name="lbl_bec_sexo" class="btn btn-default '+($.isArray(becerro)&&becerro[1]=='M'?'active':'')+'">'+
@@ -513,7 +542,7 @@ function pantalla_5(par_id,becerro){
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<div class="col-xs-12 col-sm-12 col-md-12">'+
+                        '<div class="col-md-12">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div id="status_b" class="btn-group-justified" data-toggle="buttons">'+
                                     '<label id="lbl_condicion" class="btn btn-default '+($.isArray(becerro)&&becerro[2]=='v'?'active':'')+'">'+
@@ -536,34 +565,34 @@ function pantalla_5(par_id,becerro){
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<div id="higiene" class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<h4>'+lang.presentacion+'</h4>'+
-                        '</div>'+
-                        '<div class="col-xs-6 col-sm-6 col-md-6">'+
-                            '<div id="perineo" class="btn-toolbar" role="toolbar">'+
-                                '<div class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='1'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="1" '+($.isArray(becerro)&&becerro[3]=='1'?'checked':'')+'>1</button>'+
-                                    '</label>'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='2'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="2" '+($.isArray(becerro)&&becerro[3]=='2'?'checked':'')+'>2</button>'+
-                                    '</label>'+
-                                    '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='3'?'active':'')+'">'+
-                                    '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="3" '+($.isArray(becerro)&&becerro[3]=='3'?'checked':'')+'>3</button>'+
-                                    '</label>'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.presentacion+'</span>'+
+                                '<div id="perineo" class="btn-toolbar" role="toolbar">'+
+                                    '<div class="btn-group-justified" data-toggle="buttons">'+
+                                        '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='1'?'active':'')+'">'+
+                                        '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="1" '+($.isArray(becerro)&&becerro[3]=='1'?'checked':'')+'>1</button>'+
+                                        '</label>'+
+                                        '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='2'?'active':'')+'">'+
+                                        '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="2" '+($.isArray(becerro)&&becerro[3]=='2'?'checked':'')+'>2</button>'+
+                                        '</label>'+
+                                        '<label id="lbl_bec_presentacion" class="btn btn-default '+($.isArray(becerro)&&becerro[3]=='3'?'active':'')+'">'+
+                                        '<input name="bec_presentacion" id="bec_presentacion" type="radio" value="3" '+($.isArray(becerro)&&becerro[3]=='3'?'checked':'')+'>3</button>'+
+                                        '</label>'+
+                                    '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<div class="col-xs-12 col-sm-12 col-md-12">'+
+                        '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
                                 '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[5]:g_usuario[1])+'">'+
+                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[5]:localStorage.usu_nombre)+'">'+
                             '</div>'+
                             '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[6]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?lang.actualizar:lang.agregar)+'</button>'+
                         '</div>'+
@@ -573,55 +602,208 @@ function pantalla_5(par_id,becerro){
                 '</div>'+
             '</div>'+
         '</div>';
-    mostrar_becerros(par_id,($.isArray(becerro)?becerro[6]:0));    
+    mostrar_becerros(par_id,($.isArray(becerro)?becerro[6]:0));
     $('#app').html(html);
     $('#cargando_app').hide();
 }
 
 /* Pantalla 6 */
-function pantalla_6(bec_id,bec_caravana){
+function pantalla_6(bec_id,bec_caravana,calostro){
     $('#cargando_app').show();
     var html=''+
         '<div class="header row">'+
-           '<div class="col-xs-6 col-sm-6 col-md-6">'+
+           '<div class="col-md-6">'+
             '<h4><img src="img/becerro4.png"/> | '+lang.calostro+'</h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
             '</div>'+
-           '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
+           '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
         '<div class="container">'+
-            '<div class="margins">'+
-                '<form action="" id="frm_cargar_calostro">'+
+            '<ul class="nav nav-tabs nav-justified">'+
+                '<li id="lc_1" role="presentation" class="active"><a href="javascript:;" onclick="mostrar_tab_calostro(1)" style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 1</a></li>'+
+                '<li id="lc_2" role="presentation"><a href="javascript:;" onclick="mostrar_tab_calostro(2)" style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 2</a></li>'+
+            '</ul>'+
+            '<div class="margins_small" id="dc_1" style="display:block;border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;padding:10px">'+
+                '<form action="" id="frm_cargar_calostro_1">'+
                     '<div class="row">'+
-                        '<div class="col-xs-12 col-sm-12 col-md-12">'+
+                        '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
                                 '<input id="bec_caravana" name="bec_caravana" readonly type="text" class="form-control" placeholder="" value="'+bec_caravana+'">'+
                             '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">'+lang.calidad+'</span>'+
-                                '<input id="cal_calidad" name="cal_calidad" type="number" class="form-control" placeholder="">'+
-                            '</div>'+
-                            '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad" name="cal_cantidad" type="number" class="form-control" placeholder="" ">'+
-                            '</div>'+
-                            '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">'+lang.vigor+'</span>'+
-                                '<input id="cal_vigor" name="cal_vigor" type="number" class="form-control" placeholder="">'+
-                            '</div>'+
-                            '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
-                                '<input id="cal_peso" name="cal_peso" type="number" class="form-control" placeholder="" >'+
-                            '</div>'+
-                            '<div class="input-group input-group-sm" >'+
-                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input id="cal_tecnico" name="cal_tecnico" type="text" class="form-control" placeholder="Nombre" value="'+g_usuario[1]+'">'+
+                                '<span class="input-group-addon">'+lang.tipo+'</span>'+
+                                '<div id="tipo_calostro" class="btn-toolbar" role="toolbar">'+
+                                    '<div class="btn-group-justified" data-toggle="buttons">'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==1?'active':'')+'">'+
+                                            '<input name="cal_tipo_1" id="cal_tipo_1" type="radio" value="1" '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==1?'checked':'')+'>'+lang.tc_fresco+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==2?'active':'')+'">'+
+                                            '<input name="cal_tipo_1" id="cal_tipo_1" type="radio" value="2" '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==2?'checked':'')+'>'+lang.tc_congelado+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==3?'active':'')+'">'+
+                                            '<input name="cal_tipo_1" id="cal_tipo_1" type="radio" value="3" '+(calostro&&$.isArray(calostro[1])&&calostro[1][1]==3?'checked':'')+'>'+lang.tc_sustituto+'</button>'+
+                                        '</label>'+                                            
+                                    '</div>'+
+                                '</div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
-                        '<button type="button" onclick="cargar_calostro('+bec_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+lang.listo+'!</button>'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.metodo+'</span>'+
+                                '<div id="metodo_calostro" class="btn-toolbar" role="toolbar">'+
+                                    '<div class="btn-group-justified" data-toggle="buttons">'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[1])&&calostro[1][2]==1?'active':'')+'">'+
+                                            '<input name="cal_metodo_1" id="cal_metodo_1" type="radio" value="1" '+(calostro&&$.isArray(calostro[1])&&calostro[1][2]==1?'checked':'')+'>'+lang.mc_tubo+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[1])&&calostro[1][2]==2?'active':'')+'">'+
+                                            '<input name="cal_metodo_1" id="cal_metodo_1" type="radio" value="2" '+(calostro&&$.isArray(calostro[1])&&calostro[1][2]==2?'checked':'')+'>'+lang.mc_botella+'</button>'+
+                                        '</label>'+                                        
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+        
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.calidad+'</span>'+
+                                '<input id="cal_calidad_1" name="cal_calidad_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][3]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.cantidad+'</span>'+
+                                '<input id="cal_cantidad_1" name="cal_cantidad_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][4]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.vigor+'</span>'+
+                                '<input id="cal_vigor_1" name="cal_vigor_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][5]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
+                                '<input id="cal_peso_1" name="cal_peso_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][6]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
+                                '<input id="cal_tecnico_1" name="cal_tecnico_1" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][7]:localStorage.usu_nombre)+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<button type="button" onclick="cargar_calostro(1,'+bec_id+','+(calostro&&$.isArray(calostro[1])?calostro[1][0]:0)+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+(calostro&&$.isArray(calostro[1])?lang.actualizar:lang.listo)+'!</button>'+
+                    '</div>'+
+                '</form>'+
+            '</div>'+
+            '<div class="margins_small" id="dc_2" style="display:none;border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;padding:10px">'+
+                '<form action="" id="frm_cargar_calostro_2">'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.caravana+'</span>'+
+                                '<input id="bec_caravana" name="bec_caravana" readonly type="text" class="form-control" placeholder="" value="'+bec_caravana+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.tipo+'</span>'+
+                                '<div id="tipo_calostro" class="btn-toolbar" role="toolbar">'+
+                                    '<div class="btn-group-justified" data-toggle="buttons">'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==1?'active':'')+'">'+
+                                            '<input name="cal_tipo_2" id="cal_tipo_2" type="radio" value="1" '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==1?'checked':'')+'>'+lang.tc_fresco+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==2?'active':'')+'">'+
+                                            '<input name="cal_tipo_2" id="cal_tipo_2" type="radio" value="2" '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==2?'checked':'')+'>'+lang.tc_congelado+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==3?'active':'')+'">'+
+                                            '<input name="cal_tipo_2" id="cal_tipo_2" type="radio" value="3" '+(calostro&&$.isArray(calostro[2])&&calostro[2][1]==3?'checked':'')+'>'+lang.tc_sustituto+'</button>'+
+                                        '</label>'+                                            
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.metodo+'</span>'+
+                                '<div id="metodo_calostro" class="btn-toolbar" role="toolbar">'+
+                                    '<div class="btn-group-justified" data-toggle="buttons">'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[2])&&calostro[2][2]==1?'active':'')+'">'+
+                                            '<input name="cal_metodo_2" id="cal_metodo_2" type="radio" value="1" '+(calostro&&$.isArray(calostro[2])&&calostro[2][2]==1?'checked':'')+'>'+lang.mc_tubo+'</button>'+
+                                        '</label>'+
+                                        '<label class="btn btn-default '+(calostro&&$.isArray(calostro[2])&&calostro[2][2]==2?'active':'')+'">'+
+                                            '<input name="cal_metodo_2" id="cal_metodo_2" type="radio" value="2" '+(calostro&&$.isArray(calostro[2])&&calostro[2][2]==2?'checked':'')+'>'+lang.mc_botella+'</button>'+
+                                        '</label>'+                                        
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+        
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.calidad+'</span>'+
+                                '<input id="cal_calidad_1" name="cal_calidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][3]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.cantidad+'</span>'+
+                                '<input id="cal_cantidad_1" name="cal_cantidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][4]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.vigor+'</span>'+
+                                '<input id="cal_vigor_1" name="cal_vigor_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][5]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
+                                '<input id="cal_peso_1" name="cal_peso_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][6]:'')+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="col-md-12">'+
+                            '<div class="input-group input-group-sm" >'+
+                                '<span class="input-group-addon">'+lang.tecnico+'</span>'+
+                                '<input id="cal_tecnico_1" name="cal_tecnico_2" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][7]:localStorage.usu_nombre)+'">'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<button type="button" onclick="cargar_calostro(2,'+bec_id+','+(calostro&&$.isArray(calostro[2])?calostro[2][0]:0)+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+(calostro&&$.isArray(calostro[2])?lang.actualizar:lang.listo)+'!</button>'+
                     '</div>'+
                 '</form>'+
             '</div>'+
@@ -634,36 +816,37 @@ function pantalla_6(bec_id,bec_caravana){
 function pantalla_7(){
     $('#cargando_app').show();
     var becerros='';
-    db.transaction(function(tx){tx.executeSql('select * from becerros left join partos ON (bec_parto=par_id) left join calostro ON (bec_id=cal_becerro) WHERE par_rodeo="'+g_usuario[2]+'" and (bec_muerto<>"S" or bec_muerto is null) and bec_condicion NOT IN ("m","a") and (julianday(\'now\',\'localtime\')-julianday(Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))))<1 ORDER BY Datetime(substr(bec_fecha,7,4)||"-"||substr(bec_fecha,4,2)||"-"||substr(bec_fecha,1,2)||" "||substr(bec_fecha,12,8))',[], function(tx, rs) {
+    db.transaction(function(tx){tx.executeSql('select a.par_vaca, b.bec_id, b.bec_fecha, b.bec_caravana, b.bec_condicion, count(c.cal_id) as cantidad from becerros b left join partos a ON (b.bec_parto=a.par_id) left join calostro c ON (b.bec_id=c.cal_becerro) WHERE a.par_rodeo="'+localStorage.usu_rodeo+'" and (b.bec_muerto<>"S" or b.bec_muerto is null) and (julianday(\'now\',\'localtime\')-julianday(Datetime(substr(b.bec_fecha,7,4)||"-"||substr(b.bec_fecha,4,2)||"-"||substr(b.bec_fecha,1,2)||" "||substr(b.bec_fecha,12,8))))<1 GROUP BY a.par_vaca, b.bec_id, b.bec_fecha, b.bec_caravana, b.bec_condicion ORDER BY Datetime(substr(b.bec_fecha,7,4)||"-"||substr(b.bec_fecha,4,2)||"-"||substr(b.bec_fecha,1,2)||" "||substr(b.bec_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).bec_fecha,current_date(),'minutes');
-                marcar='onclick="marcar_becerro('+rs.rows.item(i).bec_id+',\''+rs.rows.item(i).bec_caravana+'\')"';
-                if(!rs.rows.item(i).cal_id){
-                    style='style="color:#000"';
+                marcar='onclick="marcar_becerro('+rs.rows.item(i).bec_id+',\''+rs.rows.item(i).bec_caravana+'\',\''+rs.rows.item(i).bec_condicion+'\')"';
+                var iconos_calostro='';
+                for(j=0;j<rs.rows.item(i).cantidad;j++){
+                    iconos_calostro=iconos_calostro+'<span class="glyphicon glyphicon-ok"></span>';
                 }
-                else{
-                    style='style="background-color:#F7BE81"';
-                }
+                if(rs.rows.item(i).bec_condicion=='m') iconos_calostro='M';
+                if(rs.rows.item(i).bec_condicion=='a') iconos_calostro='A';
                 becerros=becerros+''+
-                    '<tr '+marcar+' '+style+' id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
+                    '<tr '+marcar+' style="color:#000" id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td valign="middle">'+rs.rows.item(i).bec_caravana+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(11,16)+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(3,5)+'/'+rs.rows.item(i).bec_fecha.substring(0,2)+'</td>'+
+                        '<td valign="middle" align="right" width="80">'+iconos_calostro+'</td>'+
                     '</tr>';
             }
         }
         var html=''+
         '<div class="header row">'+
-            '<div class="col-xs-6 col-sm-6 col-md-6">'+
+            '<div class="col-md-6">'+
             '<h4><strong>Calving App</strong></h4>'+
             '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
             '</div>'+
-            '<div class="col-xs-6 col-sm-6 col-md-6" style="text-align: right;"><h4>'+g_usuario[1]+' ('+g_usuario[3]+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
+            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
         '</div>'+
         '<div class="container">'+
-            '<div class="margins">'+
+            '<div class="margins_small">'+
                 '<div class="panel panel-default">'+
                     '<div class="panel-heading">'+lang.becerros_activos+': '+rs.rows.length+'</div>'+
                         '<table id="tabla_fix" class="table table-condensed">'+
@@ -673,6 +856,7 @@ function pantalla_7(){
                                 '<th>'+lang.becerro+'</th>'+
                                 '<th>'+lang.hora+'</th>'+
                                 '<th>'+lang.fecha+'</th>'+
+                                '<th width="80"></th>'+
                               '</tr>'+
                             '</thead>'+
                             '<tbody>'+             
@@ -681,19 +865,76 @@ function pantalla_7(){
                            '</table>'+       
                         '</div>'+
                         '<div class="functions_f">'+
-                            '<div class="col-xs-5 col-sm-5 col-md-5">'+
+                            '<div class="col-md-5">'+
                                '<button onclick="marcar_muerto()" type="button" class="ready btn btn-primary btn-lg">'+lang.muerto.toUpperCase()+'</span></button>'+
                                '<input type="hidden" name="bec_marcado" id="bec_marcado" value="">'+
                                '<input type="hidden" name="bec_nro_marcado" id="bec_nro_marcado" value="">'+
+                               '<input type="hidden" name="bec_marcado_condicion" id="bec_marcado_condicion" value="">'+
                             '</div>'+
-                            '<div class="col-xs-5 col-sm-5 col-md-5">'+
+                            '<div class="col-md-5">'+
                               '<button onclick="marcar_calostro()" type="button" class="ready btn btn-primary btn-lg">'+lang.calostro.toUpperCase()+'</button>'+
                             '</div>'+
-                            '<div class="col-xs-2 col-sm-2 col-md-2">'+
+                            '<div class="col-md-2">'+
                                '<button type="button" onclick="editar_becerro()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-pencil" style="border-bottom: white thin solid;"></span></button>'+
                             '</div>'+
                         '</div>'+                        
                     '</div>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+    $('#app').html(html);
+    $('#tabla_fix').fixheadertable({ 
+        height : 400
+    });
+    $('#cargando_app').hide();
+    })});
+}
+
+/* Pantalla 8 */
+function pantalla_8(){
+    $('#cargando_app').show();
+    var partos='';
+    db.transaction(function(tx){tx.executeSql('select a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin, count(bec_id) as cantbec from partos a left join becerros b ON (a.par_id=b.bec_parto) WHERE a.par_rodeo="'+localStorage.usu_rodeo+'" AND par_fecha_fin<>"" group by a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
+        if(rs.rows.length) {
+            for(i=0;i<rs.rows.length;i++){
+                diff=datediff(rs.rows.item(i).par_fecha,current_date(),'hours');
+                if(diff >= 24) continue;
+                partos=partos+''+
+                    '<tr>'+
+                        '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:green;"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
+                        '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(3,5)+'/'+rs.rows.item(i).par_fecha.substring(0,2)+'</td>'+
+                    '</tr>';
+            }
+        }
+        var html=''+
+        '<div class="header row">'+
+            '<div class="col-md-6">'+
+            '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.vacas_frescas+'</h4>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
+            '</div>'+
+            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
+        '</div>'+
+        '<div class="container">'+
+            '<div class="margins_small">'+
+                '<div class="panel panel-default">'+
+                  '<div class="panel-heading">'+lang.vacas_frescas+': '+rs.rows.length+'</div>'+
+                  '<div id="tableContainer" class="tableContainer">'+
+                  '<table id="tabla_fix" class="table table-condensed" >'+
+                    '<thead>'+
+                      '<tr>'+
+                        '<th width="50"></th>'+
+                        '<th>'+lang.id_vaca+'</th>'+
+                        '<th>'+lang.hora+'</th>'+
+                        '<th>'+lang.fecha+'</th>'+
+                      '</tr>'+
+                    '</thead>'+
+                    '<tbody>'+
+                        partos+          
+                    '</tbody>'+
+                   '</table>'+       
+                   '</div>'+
                 '</div>'+
             '</div>'+
         '</div>';
@@ -716,22 +957,24 @@ function comienza_parto(par_id){
         values[4]=document.querySelector('input[name="par_higiene"]:checked').value
         values[5]=$('#par_tecnico').val();
         values[6]=current_date();
-        values[7]=g_usuario[2];
-        values[8]=g_usuario[3];
+        values[7]=localStorage.usu_rodeo;
+        values[8]=localStorage.usu_rodeo_desc;
+        values[9]=$('#par_corral').val();
+        values[10]=$('#par_observaciones').val();
         db.transaction(function(tx){tx.executeSql('select * from vacas WHERE vac_id=?', [values[0]], function(tx, rs) {
             if(!rs.rows.length) {
                 db.transaction(function(tx){tx.executeSql("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')")});
                 ultimo_movimiento("insert into vacas (vac_id,vac_raza) VALUES ('"+values[0]+"','"+values[3]+"')");
             }
             if(par_id>0){
-                db.transaction(function(tx){tx.executeSql("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"' where par_id='"+par_id+"'",[],function(tx,rs){
-                    ultimo_movimiento("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"' where par_id='"+par_id+"'");
+                db.transaction(function(tx){tx.executeSql("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"', par_corral='"+values[9]+"', par_observaciones='"+values[10]+"'  where par_id='"+par_id+"'",[],function(tx,rs){
+                    ultimo_movimiento("update partos set par_vaca='"+values[0]+"', par_lactancia='"+values[1]+"', par_cc='"+values[2]+"', par_vaca_raza='"+values[3]+"', par_higiene='"+values[4]+"', par_tecnico='"+values[5]+"', par_corral='"+values[9]+"', par_observaciones='"+values[10]+"' where par_id='"+par_id+"'");
                     pantalla_2();
                 })});
                 }
             else{
-                db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')")});
-                ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc) VALUES ('"+values.join("','")+"')");
+                db.transaction(function(tx){tx.executeSql("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc,par_corral,par_observaciones) VALUES ('"+values.join("','")+"')")});
+                ultimo_movimiento("insert into partos (par_vaca,par_lactancia,par_cc,par_vaca_raza,par_higiene,par_tecnico,par_fecha,par_rodeo,par_rodeo_desc,par_corral,par_observaciones) VALUES ('"+values.join("','")+"')");
                 pantalla_2();
             }
         })});
@@ -769,13 +1012,13 @@ function cargar_becerro(par_id,bec_id){
         if(bec_id>0){
             db.transaction(function(tx){tx.executeSql("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'",[],function(tx,rs){
                 ultimo_movimiento("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'");
-                pantalla_5(par_id)            
+                pantalla_7();            
             })});
         }
         else{
             db.transaction(function(tx){tx.executeSql("insert into becerros (bec_parto,bec_sexo,bec_condicion,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
                 ultimo_movimiento("insert into becerros (bec_parto,bec_sexo,bec_condicion,bec_presentacion,bec_caravana,bec_tecnico,bec_fecha) VALUES ('"+values.join("','")+"')");
-                pantalla_5(par_id)            
+                pantalla_5(par_id);
             })});
         }
         
@@ -787,6 +1030,7 @@ function mostrar_becerros(par_id,bec_id){
     $('#cargando_app').fadeIn(300)
     var becerros='';
     var display='none';
+    var html='';
     db.transaction(function(tx){tx.executeSql('select  * from partos, becerros where par_id=bec_parto and par_id=?', [par_id], function(tx, rs) {
         if(rs.rows.length){
             for(i=0;i<rs.rows.length;i++){
@@ -800,21 +1044,24 @@ function mostrar_becerros(par_id,bec_id){
             if(bec_id==0&&rs.rows.length==rs.rows.item(0).par_becerros){
                 display='';
                 $('#btn_agregar_becerro').hide();
-            }            
-            var html=''+
-            '<div class="col-xs-12 col-sm-12 col-md-12">'+
-                '<table id="activeb" class="table table-condensed">'+
-                    '<thead>'+
-                        '<tr>'+                             
-                            '<th>'+lang.caravana+'</th>'+
-                            '<th>'+lang.hora+'</th>'+
-                            '<th>'+lang.fecha+'</th>'+
-                        '</tr>'+
-                    '</thead>'+
-                    '<tbody>'+becerros+
-                '</table>'+
-                '<button onclick="pantalla_2()" type="submit" class="ready btn btn-primary btn-md" style="margin-top:2px;display:'+display+'"><span class="glyphicon glyphicon-ok" ></span> Confirmar</button>'+
-            '</div>';
+
+                //muestro los becerros cargados una vez que termina de cargar todos
+                var html=''+
+                '<div class="col-md-12">'+
+                    '<table id="activeb" class="table table-condensed">'+
+                        '<thead>'+
+                            '<tr>'+                             
+                                '<th>'+lang.caravana+'</th>'+
+                                '<th>'+lang.hora+'</th>'+
+                                '<th>'+lang.fecha+'</th>'+
+                            '</tr>'+
+                        '</thead>'+
+                        '<tbody>'+becerros+
+                    '</table>'+
+                    '<button onclick="pantalla_2()" type="submit" class="ready btn btn-primary btn-md" style="margin-top:2px;display:'+display+'"><span class="glyphicon glyphicon-ok" ></span>'+ lang.confirmar +'</button>'+
+                '</div>';
+                $('#frm_cargar_becerro').hide();
+            }                        
         }        
         $('#tabla_becerros').html(html);
         $('#cargando_app').hide();
@@ -838,9 +1085,12 @@ function validar_formulario(form,campos){
     var $inputs = $('#'+form+' :input');
     $inputs.each(function() {
         if(this.type=='radio'&&!document.querySelector('input[name="'+this.name+'"]:checked')) vacio=true;
-        if(this.type=='text'&&$(this).val()=='') vacio=true;
+        if((this.type=='text'||this.type=='number')&&$(this).val()=='') vacio=true;
     });
-    if(vacio) notificacion("Complete todos los datos.","error");
+    if(vacio){
+      notificacion(lang.complete_todo_los_campos,"error");
+      return false;
+    } 
     else return true;
 }
 
@@ -883,22 +1133,24 @@ function dateFormat(fecha) {
 
 function ultimo_movimiento(sql){
     if(sql!=""){
-        db.transaction(function(tx){tx.executeSql("insert into movimientos (mov_sql) VALUES ('"+escape(sql)+"')")});
+        db.transaction(function(tx){tx.executeSql("insert into movimientos (mov_sql,usu_codigo) VALUES ('"+escape(sql)+"','"+localStorage.usu_codigo+"')")});
         db.transaction(function(tx){tx.executeSql("update configuracion set cfg_ult_act_local='"+current_date()+"'")});    
     }
 }
 
-function marcar_becerro(bec_id,bec_caravana){
+function marcar_becerro(bec_id,bec_caravana,bec_condicion){
     if($('#reg_becerro_'+bec_id).hasClass('marca_becerro')){
         $('#reg_becerro_'+bec_id).removeClass();
         $('#bec_marcado').val('');
         $('#bec_nro_marcado').val('');
+        $('#bec_marcado_condicion').val('');
     }
     else{
         $('tr[name*=reg_becerro_]').removeClass();
         $('#reg_becerro_'+bec_id).addClass('marca_becerro');
         $('#bec_marcado').val(bec_id);
         $('#bec_nro_marcado').val(bec_caravana);
+        $('#bec_marcado_condicion').val(bec_condicion);
     }    
 }
 
@@ -912,7 +1164,28 @@ function marcar_muerto(){
 
 function marcar_calostro(){
     if($('#bec_marcado').val()!=""&&$('#bec_nro_marcado').val()!=""){
-        pantalla_6($('#bec_marcado').val(),$('#bec_nro_marcado').val());
+        if($('#bec_marcado_condicion').val()=='a'||$('#bec_marcado_condicion').val()=='m') return false;
+        db.transaction(function(tx){tx.executeSql('select  * from calostro where cal_becerro=?', [$('#bec_marcado').val()], function(tx, rs) {
+            calostro=Array();
+            if(rs.rows.length){
+                for(i=0;i<rs.rows.length;i++){
+                    if(!rs.rows.item(i).cal_nro) rs.rows.item(i).cal_nro=1;
+                    calostro[rs.rows.item(i).cal_nro]=Array();
+                    calostro[rs.rows.item(i).cal_nro][0]=rs.rows.item(i).cal_id;
+                    calostro[rs.rows.item(i).cal_nro][1]=rs.rows.item(i).cal_tipo;
+                    calostro[rs.rows.item(i).cal_nro][2]=rs.rows.item(i).cal_metodo;
+                    calostro[rs.rows.item(i).cal_nro][3]=rs.rows.item(i).cal_calidad;
+                    calostro[rs.rows.item(i).cal_nro][4]=rs.rows.item(i).cal_cantidad;
+                    calostro[rs.rows.item(i).cal_nro][5]=rs.rows.item(i).cal_vigor;
+                    calostro[rs.rows.item(i).cal_nro][6]=rs.rows.item(i).cal_peso;
+                    calostro[rs.rows.item(i).cal_nro][7]=rs.rows.item(i).cal_tecnico;
+                }
+                pantalla_6($('#bec_marcado').val(),$('#bec_nro_marcado').val(),calostro);
+            }
+            else{
+                pantalla_6($('#bec_marcado').val(),$('#bec_nro_marcado').val());
+            }
+        })});
     }
 }
 
@@ -922,21 +1195,32 @@ function editar_becerro(){
     }
 }
 
-function cargar_calostro(bec_id){
+function cargar_calostro(cal_nro,bec_id,cal_id){
     $('#cargando_app').show();
-    if(validar_formulario('frm_cargar_calostro','todos')){
+    if(validar_formulario('frm_cargar_calostro_'+cal_nro,'todos')){
         var values = new Array();
         values[0]=bec_id;
-        values[1]=$('#cal_calidad').val();
-        values[2]=$('#cal_cantidad').val();
-        values[3]=$('#cal_vigor').val();
-        values[4]=$('#cal_peso').val();
-        values[5]=$('#cal_tecnico').val();
+        values[1]=$('#cal_calidad_'+cal_nro).val();
+        values[2]=$('#cal_cantidad_'+cal_nro).val();
+        values[3]=$('#cal_vigor_'+cal_nro).val();
+        values[4]=$('#cal_peso_'+cal_nro).val();
+        values[5]=$('#cal_tecnico_'+cal_nro).val();
         values[6]=current_date();
-        db.transaction(function(tx){tx.executeSql("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
-            ultimo_movimiento("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha) VALUES ('"+values.join("','")+"')");
-            pantalla_7();
-        })});
+        values[7]=document.querySelector('input[name="cal_tipo_'+cal_nro+'"]:checked').value;
+        values[8]=document.querySelector('input[name="cal_metodo_'+cal_nro+'"]:checked').value;
+        values[9]=cal_nro;        
+        if(cal_id>0){
+            db.transaction(function(tx){tx.executeSql("update calostro set cal_calidad='"+values[1]+"',cal_cantidad='"+values[2]+"',cal_vigor='"+values[3]+"',cal_peso='"+values[4]+"',cal_tecnico='"+values[5]+"',cal_tipo='"+values[7]+"',cal_metodo='"+values[8]+"' WHERE cal_id='"+cal_id+"'",[],function(tx,rs){
+                ultimo_movimiento("update calostro set cal_calidad='"+values[1]+"',cal_cantidad='"+values[2]+"',cal_vigor='"+values[3]+"',cal_peso='"+values[4]+"',cal_tecnico='"+values[5]+"',cal_tipo='"+values[7]+"',cal_metodo='"+values[8]+"' WHERE cal_id='"+cal_id+"'");
+                pantalla_7();
+            })});    
+        }
+        else{
+            db.transaction(function(tx){tx.executeSql("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha,cal_tipo,cal_metodo,cal_nro) VALUES ('"+values.join("','")+"')",[],function(tx,rs){
+                ultimo_movimiento("insert into calostro (cal_becerro,cal_calidad,cal_cantidad,cal_vigor,cal_peso,cal_tecnico,cal_fecha,cal_tipo,cal_metodo,cal_nro) VALUES ('"+values.join("','")+"')");
+                pantalla_7();
+            })});    
+        }
     }
     $('#cargando_app').hide();
 }
@@ -971,6 +1255,8 @@ function obtener_parto(par_id){
             parto[4]=rs.rows.item(0).par_higiene;
             parto[5]=rs.rows.item(0).par_tecnico;
             parto[6]=rs.rows.item(0).par_id;
+            parto[7]=rs.rows.item(0).par_corral;
+            parto[8]=rs.rows.item(0).par_observaciones;
             pantalla_3(parto);
         }
         else{
@@ -1027,6 +1313,15 @@ function cambiar_idioma(idioma){
     if(idioma=='es') lang=lang_es;
     if(idioma=='en') lang=lang_en; 
     verificar_base();
+}
+
+function mostrar_tab_calostro(cal){
+    $("#lc_1").removeClass("active");
+    $("#lc_2").removeClass("active");
+    $("#dc_1").hide();
+    $("#dc_2").hide();
+    $("#lc_"+cal).addClass("active");
+    $("#dc_"+cal).show();
 }
 
 buscar_actualizaciones();

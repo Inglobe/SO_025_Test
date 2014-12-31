@@ -44,7 +44,20 @@ var lang_es = {
 	bec_cond_MF:'MF',
 	bec_cond_A:'A',
 	bec_cond_P:'P',
-	bec_cond_M:'M'
+	bec_cond_M:'M',
+	confirmar:'Confirmar',
+	registrar: 'Crear cuenta',
+	corral: 'Corral',
+	notas: 'Notas',
+	tipo: 'Tipo',
+	metodo: 'Método',
+	tc_fresco: 'Fresco',
+	tc_congelado: 'Congelado',
+	tc_sustituto: 'Sustituto',
+	mc_tubo: 'Tubo',
+	mc_botella: 'Botella',
+	vacas_frescas: 'Vacas Frescas',
+	complete_todo_los_campos: 'Complete todos los campos.'
 };
 
 var lang_en = {
@@ -75,7 +88,7 @@ var lang_en = {
 	caravana:'Calf ID',
 	becerros_activos:'Active calves',
 	muerto:'Dead',
-	calostro:'Calostrum',
+	calostro:'Colostrum',
 	calidad:'Quality',
 	cantidad:'Quantity',
 	vigor:'Vigor',
@@ -93,7 +106,20 @@ var lang_en = {
 	bec_cond_MF:'MF',
 	bec_cond_A:'Ab',
 	bec_cond_P:'P',
-	bec_cond_M:'D'
+	bec_cond_M:'D',
+	confirmar:'Confirm',
+	registrar: 'Create an account',
+	corral: 'Pen',
+	notas: 'Notes',
+	tipo: 'Type',
+	metodo: 'Method',
+	tc_fresco: 'Fresh',
+	tc_congelado: 'Frozen',
+	tc_sustituto: 'Substitute',
+	mc_tubo: 'Tube',
+	mc_botella: 'Bottle',
+	vacas_frescas: 'Fresh Cows',
+	complete_todo_los_campos: 'Please, complete all fields.'
 };
 
 var lang=lang_es;

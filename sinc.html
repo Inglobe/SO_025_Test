@@ -35,7 +35,7 @@
         </div>        
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>        
-        <script type="text/javascript" src="js/index.js"></script>
+        <!--<script type="text/javascript" src="js/index.js"></script>!-->
         <script type="text/javascript">
             app.initialize();            
         </script>
@@ -45,7 +45,11 @@
 
 <script type="text/javascript">
  
+/* Abro la base de datos */
+var dir_datos = 'http://ohio.inglobe.com.ar/dev/';
+var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
+
 var indicador = $("#progreso");
 var por_bbdd_descarga = 50;
 var por_bbdd_subir = 50;
@@ -53,16 +57,18 @@ var por_bbdd_subir = 50;
 function descargar_bbdd(){
     var tablas=Array(
         "configuracion",
+        "movimientos",
         "usuarios",
         "vacas",
         "partos",
         "becerros",
-        "calostro"
+        "calostro"        
     );
-    descargar_tablas(db,tablas,0);
+    descargar_tablas_init(db,tablas,0);
 }
 
-function descargar_tablas(db,tablas,index){
+/* Descargo tablas */
+function descargar_tablas_init(db,tablas,index){
     var total=tablas.length;
     var indice=index;
     var error = 0;
@@ -70,7 +76,7 @@ function descargar_tablas(db,tablas,index){
         type: "post",
         url: dir_datos+"datos.php",
         dataType: "text",
-        data: { accion: "descargar_datos", tabla: tablas[indice], init:'no' },
+        data: { accion: "descargar_datos", tabla: tablas[indice], init:'si' },
         cache: false,
         success: function( data ){
             if(data){
@@ -87,41 +93,22 @@ function descargar_tablas(db,tablas,index){
         },
         complete: function(){ 
             if(error==1){
-                $('#barra').removeClass("blue");
-                $('#barra').addClass("red");
-                setTimeout(
-                    function(){ location.replace('index.html'); },
-                    1000
-                );
+                alert("error");
             }
             else{
-                var ancho=por_bbdd_subir + (por_bbdd_descarga/tablas.length*(indice+1));
-                indicador.css("width",ancho+"%");
                 if(indice==(total-1)){
-                    $('#barra').removeClass("blue");
-                    $('#barra').addClass("green");
-                    indicador.css("width","100%")
-                    setTimeout(
-                        function(){ location.replace('index.html'); },
-                        1000
-                    );
+                     location.replace('index.html')
                 }
                 else{
-                    descargar_tablas(db,tablas,(indice+1));
+                    descargar_tablas_init(db,tablas,(indice+1));
                 }
             }           
         },
         error: function(){
-            $('#barra').removeClass("blue");
-            $('#barra').addClass("red");
-            setTimeout(
-                function(){ location.replace('index.html'); },
-                1000
-            );
+            alert("error");
         }
     });    
 }
-
 function subir_bbdd(){
     var tablas=Array(
         "movimientos"
@@ -147,7 +134,7 @@ function subir_tablas(db,tablas,index){
             success: function(data){
                 var ancho=por_bbdd_subir/tablas.length*(indice+1);
                 indicador.css("width",ancho+"%");
-                db.transaction(function(tx){tx.executeSql('delete from '+tablas[indice])});                        
+                //db.transaction(function(tx){tx.executeSql('delete from '+tablas[indice])});
             },
             complete: function(){
                 if(indice==(total-1)){
