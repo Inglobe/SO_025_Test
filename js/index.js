@@ -865,16 +865,16 @@ function pantalla_7(){
                            '</table>'+       
                         '</div>'+
                         '<div class="functions_f">'+
-                            '<div class="col-md-5">'+
+                            '<div class="col-md-5" style="padding:5px">'+
                                '<button onclick="marcar_muerto()" type="button" class="ready btn btn-primary btn-lg">'+lang.muerto.toUpperCase()+'</span></button>'+
                                '<input type="hidden" name="bec_marcado" id="bec_marcado" value="">'+
                                '<input type="hidden" name="bec_nro_marcado" id="bec_nro_marcado" value="">'+
                                '<input type="hidden" name="bec_marcado_condicion" id="bec_marcado_condicion" value="">'+
                             '</div>'+
-                            '<div class="col-md-5">'+
+                            '<div class="col-md-5" style="padding:5px">'+
                               '<button onclick="marcar_calostro()" type="button" class="ready btn btn-primary btn-lg">'+lang.calostro.toUpperCase()+'</button>'+
                             '</div>'+
-                            '<div class="col-md-2">'+
+                            '<div class="col-md-2" style="padding:5px">'+
                                '<button type="button" onclick="editar_becerro()" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-pencil" style="border-bottom: white thin solid;"></span></button>'+
                             '</div>'+
                         '</div>'+                        
@@ -894,11 +894,13 @@ function pantalla_7(){
 function pantalla_8(){
     $('#cargando_app').show();
     var partos='';
+    var cantidad=0;
     db.transaction(function(tx){tx.executeSql('select a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin, count(bec_id) as cantbec from partos a left join becerros b ON (a.par_id=b.bec_parto) WHERE a.par_rodeo="'+localStorage.usu_rodeo+'" AND par_fecha_fin<>"" group by a.par_fecha, a.par_id, a.par_vaca, par_fecha_fin ORDER BY Datetime(substr(par_fecha,7,4)||"-"||substr(par_fecha,4,2)||"-"||substr(par_fecha,1,2)||" "||substr(par_fecha,12,8))',[], function(tx, rs) {
         if(rs.rows.length) {
             for(i=0;i<rs.rows.length;i++){
                 diff=datediff(rs.rows.item(i).par_fecha,current_date(),'hours');
                 if(diff >= 24) continue;
+                cantidad++;
                 partos=partos+''+
                     '<tr>'+
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:green;"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
@@ -919,7 +921,7 @@ function pantalla_8(){
         '<div class="container">'+
             '<div class="margins_small">'+
                 '<div class="panel panel-default">'+
-                  '<div class="panel-heading">'+lang.vacas_frescas+': '+rs.rows.length+'</div>'+
+                  '<div class="panel-heading">'+lang.vacas_frescas+': '+cantidad+'</div>'+
                   '<div id="tableContainer" class="tableContainer">'+
                   '<table id="tabla_fix" class="table table-condensed" >'+
                     '<thead>'+

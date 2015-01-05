@@ -51,11 +51,11 @@ var lang_es = {
 	notas: 'Notas',
 	tipo: 'Tipo',
 	metodo: 'Método',
-	tc_fresco: 'Fresco',
-	tc_congelado: 'Congelado',
-	tc_sustituto: 'Sustituto',
-	mc_tubo: 'Tubo',
-	mc_botella: 'Botella',
+	tc_fresco: 'FR',
+	tc_congelado: 'CO',
+	tc_sustituto: 'SU',
+	mc_tubo: 'TU',
+	mc_botella: 'BO',
 	vacas_frescas: 'Vacas Frescas',
 	complete_todo_los_campos: 'Complete todos los campos.'
 };
@@ -113,11 +113,11 @@ var lang_en = {
 	notas: 'Notes',
 	tipo: 'Type',
 	metodo: 'Method',
-	tc_fresco: 'Fresh',
-	tc_congelado: 'Frozen',
-	tc_sustituto: 'Substitute',
-	mc_tubo: 'Tube',
-	mc_botella: 'Bottle',
+	tc_fresco: 'FR',
+	tc_congelado: 'FZ',
+	tc_sustituto: 'SU',
+	mc_tubo: 'TU',
+	mc_botella: 'BO',
 	vacas_frescas: 'Fresh Cows',
 	complete_todo_los_campos: 'Please, complete all fields.'
 };
