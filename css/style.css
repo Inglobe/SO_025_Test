@@ -14,8 +14,9 @@ body {
 
 }
 .container{
-	padding-left: 1em;
-	padding-right: 1em;
+	/*padding-left: 1em;
+	padding-right: 1em;*/
+	width: 100%;
 }
 .btn{
 	font-size: 40px;

@@ -234,7 +234,7 @@ function pantalla_2(){
         '<div class="header row">'+
             '<div class="col-md-6">'+
             '<h4><strong>Calving App</strong></h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+
             '</div>'+
             '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a style="color:red;" href="javascript:logout()"><span class="glyphicon glyphicon-remove-circle"></span><strong> '+lang.salir+'</strong></a></div>'+
         '</div>'+
@@ -280,7 +280,7 @@ function pantalla_3(parto){
         '<div class="header row">'+
             '<div class="col-md-6">'+
             '<h4><img src="img/vaca.png"/> | <strong>'+lang.info_vaca+'</strong></h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+
             '</div>'+
             '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
         '</div>'+
@@ -321,28 +321,28 @@ function pantalla_3(parto){
                     '<div class="raza col-md-12" style="margin-bottom:10px">'+
                         '<h4>'+lang.raza+'</h4>'+
                     '</div>'+
-                    '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
+                    '<div id="raza_option"class="input-group input-group-sm col-md-12" style="width: 100%;">'+
                         '<div class="btn-toolbar" role="toolbar">'+
                             '<div class="btn-group-justified" data-toggle="buttons">'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='h'?'active':'')+'">'+
+                                '<label  class="btn btn-default '+($.isArray(parto)&&parto[3]=='h'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="h" '+($.isArray(parto)&&parto[3]=='h'?'checked':'')+'>H'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='j'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='j'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="j" '+($.isArray(parto)&&parto[3]=='j'?'checked':'')+'>J'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='x'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='x'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="x" '+($.isArray(parto)&&parto[3]=='x'?'checked':'')+'>X'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='b'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='b'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="b" '+($.isArray(parto)&&parto[3]=='b'?'checked':'')+'>B'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='r'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='r'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="r" '+($.isArray(parto)&&parto[3]=='r'?'checked':'')+'>R'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='g'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='g'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="g" '+($.isArray(parto)&&parto[3]=='g'?'checked':'')+'>G'+
                                 '</label>'+
-                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='.'?'active':'')+'">'+
+                                '<label class="btn btn-default '+($.isArray(parto)&&parto[3]=='.'?'active':'')+'" style="width: 14%;">'+
                                 '<input name="par_vaca_raza" id="par_vaca_raza" type="radio" value="." '+($.isArray(parto)&&parto[3]=='.'?'checked':'')+'>.'+
                                 '</label>'+
                             '</div>'+
@@ -402,7 +402,7 @@ function pantalla_4(par_id,vac_id){
         '<div class="header row">'+
             '<div class="col-md-6">'+
             '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.parto+'</h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+                
             '</div>'+
             '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
@@ -443,22 +443,22 @@ function pantalla_4(par_id,vac_id){
                         '<div class="raza col-md-12" style="margin-bottom:10px">'+
                             '<h4>'+lang.dificultad+'</h4>'+
                         '</div>'+
-                        '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
+                        '<div id="raza_option"class="input-group input-group-sm col-md-12" style="width: 100%;">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 20%;">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="1">1'+
                                     '</label>'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 20%;">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="2">2'+
                                     '</label>'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 20%;">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="3">3'+
                                     '</label>'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 20%;">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="4">4'+
                                     '</label>'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 20%;">'+
                                     '<input name="par_dificultad" id="par_dificultad" type="radio" value="5">5'+
                                     '</label>'+                                    
                                 '</div>'+
@@ -469,28 +469,28 @@ function pantalla_4(par_id,vac_id){
                         '<div class="raza col-md-12" style="margin-bottom:10px">'+
                             '<h4>'+lang.raza+'</h4>'+
                         '</div>'+
-                        '<div id="raza_option"class="input-group input-group-sm col-md-12">'+
+                        '<div id="raza_option"class="input-group input-group-sm col-md-12" style="width: 100%;">'+
                             '<div class="btn-toolbar" role="toolbar">'+
                                 '<div class="btn-group-justified" data-toggle="buttons">'+
-                                    '<label class="btn btn-default">'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="h">H'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="j">J'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="x">X'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="b">B'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="r">R'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value="g">G'+
-                                        '</label>'+
-                                        '<label class="btn btn-default">'+
+                                    '</label>'+
+                                    '<label class="btn btn-default" style="width: 14%;">'+
                                         '<input name="par_raza_becerros" id="par_raza_becerros" type="radio" value=".">.'+
                                     '</label>'+
                                 '</div>'+
@@ -520,7 +520,7 @@ function pantalla_5(par_id,becerro){
         '<div class="header row">'+
            '<div class="col-md-6">'+
             '<h4><img src="img/becerro4.png"/> | '+lang.becerro+'</h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+        
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+        
             '</div>'+        
            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
@@ -614,7 +614,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
         '<div class="header row">'+
            '<div class="col-md-6">'+
             '<h4><img src="img/becerro4.png"/> | '+lang.calostro+'</h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+                
             '</div>'+
            '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_7()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
@@ -841,7 +841,7 @@ function pantalla_7(){
         '<div class="header row">'+
             '<div class="col-md-6">'+
             '<h4><strong>Calving App</strong></h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+                
             '</div>'+
             '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span><strong> '+lang.volver+'</strong></a></div>'+
         '</div>'+
@@ -914,7 +914,7 @@ function pantalla_8(){
         '<div class="header row">'+
             '<div class="col-md-6">'+
             '<h4><span class="glyphicon glyphicon-time"></span> | '+lang.vacas_frescas+'</h4>'+
-            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;">'+lang.sincronizar+'</button>'+                
+            '<button type="button" onclick="actualizar_aceptar()" class="btn btn-success btn-xs" style="float:left;margin:6px 10px 0 0;z-index:10">'+lang.sincronizar+'</button>'+                
             '</div>'+
             '<div class="col-md-6" style="text-align: right;"><h4>'+localStorage.usu_nombre+' ('+localStorage.usu_rodeo_desc+')</h4><a href="javascript:pantalla_2()"><span class="glyphicon glyphicon-arrow-left"></span> '+lang.volver+'</a></div>'+
         '</div>'+
