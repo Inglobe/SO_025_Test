@@ -18,7 +18,7 @@
  */
 
 /* Abro la base de datos */
-var dir_datos = 'http://ohio.inglobe.com.ar/';
+var dir_datos = 'http://ohio.inglobe.com.ar/backend/';
 var db = false;
 var db = openDatabase('uni_ohio','1','', 3*1024*1024);
 
