@@ -177,7 +177,7 @@ function login(){
             localStorage.usu_rodeo_desc=rs.rows.item(0).usu_rodeo_desc;            
             pantalla_2();            
           }else{
-            notificacion("Datos iconrrectos, intente nuevamente.","error");            
+            notificacion(lang.error_login,"error");            
           }
         })});        
     }
@@ -222,7 +222,7 @@ function pantalla_2(){
                     css_back='green';
                 }
                 partos=partos+''+
-                    '<tr>'+
+                    '<tr style="border-bottom:3px solid #fff">'+
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:'+css_back+';"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
                         '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
@@ -620,8 +620,8 @@ function pantalla_6(bec_id,bec_caravana,calostro){
         '</div>'+
         '<div class="container">'+
             '<ul class="nav nav-tabs nav-justified">'+
-                '<li id="lc_1" role="presentation" class="active"><a href="javascript:;" onclick="mostrar_tab_calostro(1)" style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 1</a></li>'+
-                '<li id="lc_2" role="presentation"><a href="javascript:;" onclick="mostrar_tab_calostro(2)" style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 2</a></li>'+
+                '<li id="lc_1" role="presentation" class="active" onclick="mostrar_tab_calostro(1)"><a href="javascript:;"  style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 1</a></li>'+
+                '<li id="lc_2" role="presentation"  '+(!calostro||!$.isArray(calostro[1])?'class="disabled"':'onclick="mostrar_tab_calostro(2)"')+'><a href="javascript:;"  style="font-size: 25px;padding: 10px;color:#555">'+lang.calostro+' 2</a></li>'+
             '</ul>'+
             '<div class="margins_small" id="dc_1" style="display:block;border-left: 1px solid #ddd;border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;padding:10px">'+
                 '<form action="" id="frm_cargar_calostro_1">'+
@@ -766,7 +766,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.calidad+'</span>'+
-                                '<input id="cal_calidad_1" name="cal_calidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][3]:'')+'">'+
+                                '<input id="cal_calidad_2" name="cal_calidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][3]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -774,7 +774,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad_1" name="cal_cantidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][4]:'')+'">'+
+                                '<input id="cal_cantidad_2" name="cal_cantidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][4]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -782,7 +782,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
-                                '<input id="cal_vigor_1" name="cal_vigor_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][5]:'')+'">'+
+                                '<input id="cal_vigor_2" name="cal_vigor_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][5]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -790,7 +790,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
-                                '<input id="cal_peso_1" name="cal_peso_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][6]:'')+'">'+
+                                '<input id="cal_peso_2" name="cal_peso_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][6]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -798,7 +798,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input id="cal_tecnico_1" name="cal_tecnico_2" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][7]:localStorage.usu_nombre)+'">'+
+                                '<input id="cal_tecnico_2" name="cal_tecnico_2" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][7]:localStorage.usu_nombre)+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -828,7 +828,7 @@ function pantalla_7(){
                 if(rs.rows.item(i).bec_condicion=='m') iconos_calostro='M';
                 if(rs.rows.item(i).bec_condicion=='a') iconos_calostro='A';
                 becerros=becerros+''+
-                    '<tr '+marcar+' style="color:#000" id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
+                    '<tr '+marcar+' style="color:#000;border-bottom:3px solid #fff" id="reg_becerro_'+rs.rows.item(i).bec_id+'" name="reg_becerro_'+rs.rows.item(i).bec_id+'">'+
                         '<td valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td valign="middle">'+rs.rows.item(i).bec_caravana+'</td>'+
                         '<td>'+rs.rows.item(i).bec_fecha.substring(11,16)+'</td>'+
@@ -902,7 +902,7 @@ function pantalla_8(){
                 if(diff >= 24) continue;
                 cantidad++;
                 partos=partos+''+
-                    '<tr>'+
+                    '<tr style="border-bottom:3px solid #fff">'+
                         '<td onclick="obtener_parto('+rs.rows.item(i).par_id+')"  width="50" height="35" style="background-color:green;"><span class="glyphicon glyphicon-pencil" style="border-bottom: black thin solid;"></span></td>'+
                         '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'" valign="middle">'+rs.rows.item(i).par_vaca+'</td>'+
                         '<td onclick="'+(!rs.rows.item(i).par_fecha_fin?'pantalla_4('+rs.rows.item(i).par_id+',\''+rs.rows.item(i).par_vaca+'\')':'pantalla_5('+rs.rows.item(i).par_id+')')+'">'+rs.rows.item(i).par_fecha.substring(11,16)+'</td>'+
@@ -1312,8 +1312,14 @@ function soloNumeros(e){
 }
 
 function cambiar_idioma(idioma){
-    if(idioma=='es') lang=lang_es;
-    if(idioma=='en') lang=lang_en; 
+    if(idioma=='es'){
+      lang=lang_es;
+      localStorage.idioma='es';
+    } 
+    if(idioma=='en'){
+        lang=lang_en;
+        localStorage.idioma='en';
+    } 
     verificar_base();
 }
 

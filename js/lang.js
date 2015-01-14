@@ -57,7 +57,8 @@ var lang_es = {
 	mc_tubo: 'TU',
 	mc_botella: 'BO',
 	vacas_frescas: 'Vacas Frescas',
-	complete_todo_los_campos: 'Complete todos los campos.'
+	complete_todo_los_campos: 'Complete todos los campos.',
+	error_login: 'Datos iconrrectos, intente nuevamente.'
 };
 
 var lang_en = {
@@ -119,7 +120,9 @@ var lang_en = {
 	mc_tubo: 'TU',
 	mc_botella: 'BO',
 	vacas_frescas: 'Fresh Cows',
-	complete_todo_los_campos: 'Please, complete all fields.'
+	complete_todo_los_campos: 'Please, complete all fields.',
+	error_login: 'Your password or username is incorrect, please try again.'
 };
 
-var lang=lang_es;
+if(!localStorage.idioma||localStorage.idioma=='es') var lang=lang_es;
+else var lang=lang_en;
