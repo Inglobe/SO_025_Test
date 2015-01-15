@@ -138,9 +138,9 @@ function descargar_tablas_init(db,tablas,index){
 function pantalla_login(){
     if(!localStorage.usu_codigo){
         html='<div class="container">'+
-                '<div id="lang" style="margin-top:2%;">'+
-                    '<h4><a><img onclick="cambiar_idioma(\'en\')" class="english" src="img/fondo.png" /></a></h4>'+
-                    '<h4><a><img onclick="cambiar_idioma(\'es\')" class="espanol" src="img/fondo.png" /></a></h4>'+
+                '<div id="lang">'+
+                    '<a><img onclick="cambiar_idioma(\'en\')" class="english" src="img/fondo.png" /></a>'+
+                    '<a><img onclick="cambiar_idioma(\'es\')" class="espanol" src="img/fondo.png" /></a>'+
                 '</div>'+
                 '<div id="logo"><img src="img/logo.png"/></div>'+
                 '<div class="input-group input-group-lg loginscreen" >'+
@@ -152,7 +152,7 @@ function pantalla_login(){
                   '<input id="usu_password" type="password" class="form-control" placeholder="'+lang.password+'">'+
                 '</div>'+
                 '<button id="ingresar" style="display:block;width:100%;margin-bottom:10px" type="button" onclick="login()" class="btn btn-inverse btn-lg">'+lang.ingresar+'</button>'+
-                '<button id="registrar" style="display:block;width:100%" type="button" onclick="window.open(\'http://www.ecalvin.com\',\'_blank\')" class="btn btn-success btn-lg">'+lang.registrar+'</button>'+
+                '<button id="registrar" style="display:block;width:100%" type="button" onclick="window.open(\'http://www.ecalvin.com\',\'_blank\')" class="btn btn-inverse btn-lg">'+lang.registrar+'</button>'+
             '</div>';
         $('#app').html(html);
         $('#cargando').hide();
@@ -198,11 +198,11 @@ function notificacion(texto,clase){
     $('#notificacion').removeClass();
     $('#notificacion').addClass(clase);
     $('#notificacion').html(texto);
-    $('#notificacion').css('bottom','-70px');
+    $('#notificacion').css('bottom','-38px');
     $('#notificacion').show();
-    $('#notificacion').animate({ bottom: '0' }, 300);
+    $('#notificacion').animate({ bottom: '0' }, 600);
     setTimeout(function(){
-      $('#notificacion').animate({ bottom: '-70px' }, 300);
+      $('#notificacion').animate({ bottom: '-38px' }, 600);
     },3000)
 }
 
@@ -381,7 +381,7 @@ function pantalla_3(parto){
                     '<div class="col-md-12">'+
                         '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+($.isArray(parto)?parto[5]:localStorage.usu_nombre)+'">'+
+                            '<input type="text" class="form-control" placeholder="" name="par_tecnico" id="par_tecnico" value="'+(localStorage.tecnino?localStorage.tecnino:'')+'">'+
                         '</div>'+
                     '</div>'+
                     '<div class="row">'+
@@ -501,7 +501,7 @@ function pantalla_4(par_id,vac_id){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="" value="'+localStorage.usu_nombre+'">'+
+                                '<input type="text" name="par_tecnico_becerros" id="par_tecnico_becerros" class="form-control" placeholder="" value="'+(localStorage.tecnino?localStorage.tecnino:'')+'">'+
                             '</div>'+
                             '<button type="button" onclick="fin_parto('+par_id+')" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> '+lang.listo+'!</button>'+
                         '</div>'+
@@ -592,7 +592,7 @@ function pantalla_5(par_id,becerro){
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[5]:localStorage.usu_nombre)+'">'+
+                                '<input type="text" name="bec_tecnico" id="bec_tecnico" class="form-control" placeholder="" value="'+(localStorage.tecnino?localStorage.tecnino:'')+'">'+
                             '</div>'+
                             '<button id="btn_agregar_becerro" onclick="cargar_becerro('+par_id+','+($.isArray(becerro)?becerro[6]:0)+')" type="button" class="ready btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus-sign"></span> '+($.isArray(becerro)?lang.actualizar:lang.agregar)+'</button>'+
                         '</div>'+
@@ -706,7 +706,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input id="cal_tecnico_1" name="cal_tecnico_1" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][7]:localStorage.usu_nombre)+'">'+
+                                '<input id="cal_tecnico_1" name="cal_tecnico_1" type="text" class="form-control" placeholder="Nombre" value="'+(localStorage.tecnino?localStorage.tecnino:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -798,7 +798,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
-                                '<input id="cal_tecnico_2" name="cal_tecnico_2" type="text" class="form-control" placeholder="Nombre" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][7]:localStorage.usu_nombre)+'">'+
+                                '<input id="cal_tecnico_2" name="cal_tecnico_2" type="text" class="form-control" placeholder="Nombre" value="'+(localStorage.tecnino?localStorage.tecnino:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -958,6 +958,7 @@ function comienza_parto(par_id){
         values[3]=document.querySelector('input[name="par_vaca_raza"]:checked').value;
         values[4]=document.querySelector('input[name="par_higiene"]:checked').value
         values[5]=$('#par_tecnico').val();
+        localStorage.tecnino=$('#par_tecnico').val();
         values[6]=current_date();
         values[7]=localStorage.usu_rodeo;
         values[8]=localStorage.usu_rodeo_desc;
@@ -992,6 +993,7 @@ function fin_parto(par_id){
         values[1]=document.querySelector('input[name="par_dificultad"]:checked').value;
         values[2]=document.querySelector('input[name="par_raza_becerros"]:checked').value;
         values[3]=$('#par_tecnico_becerros').val();
+        localStorage.tecnino=$('#par_tecnico_becerros').val();
         values[4]=current_date();
         db.transaction(function(tx){tx.executeSql("update partos set par_becerros='"+values[0]+"', par_dificultad='"+values[1]+"', par_raza_becerros='"+values[2]+"', par_tecnico_becerros='"+values[3]+"', par_fecha_fin='"+values[4]+"' where par_id='"+par_id+"'")});
         ultimo_movimiento("update partos set par_becerros='"+values[0]+"', par_dificultad='"+values[1]+"', par_raza_becerros='"+values[2]+"', par_tecnico_becerros='"+values[3]+"', par_fecha_fin='"+values[4]+"' where par_id='"+par_id+"'");
@@ -1010,6 +1012,7 @@ function cargar_becerro(par_id,bec_id){
         values[3]=document.querySelector('input[name="bec_presentacion"]:checked').value;
         values[4]=$('#bec_caravana').val();
         values[5]=$('#bec_tecnico').val();
+        localStorage.tecnino=$('#bec_tecnico').val();
         values[6]=current_date();
         if(bec_id>0){
             db.transaction(function(tx){tx.executeSql("update becerros set bec_sexo='"+values[1]+"', bec_condicion='"+values[2]+"', bec_presentacion='"+values[3]+"', bec_caravana='"+values[4]+"', bec_tecnico='"+values[5]+"' where bec_id='"+bec_id+"'",[],function(tx,rs){
@@ -1207,6 +1210,7 @@ function cargar_calostro(cal_nro,bec_id,cal_id){
         values[3]=$('#cal_vigor_'+cal_nro).val();
         values[4]=$('#cal_peso_'+cal_nro).val();
         values[5]=$('#cal_tecnico_'+cal_nro).val();
+        localStorage.tecnino=$('#cal_tecnico_'+cal_nro).val();
         values[6]=current_date();
         values[7]=document.querySelector('input[name="cal_tipo_'+cal_nro+'"]:checked').value;
         values[8]=document.querySelector('input[name="cal_metodo_'+cal_nro+'"]:checked').value;
