@@ -61,13 +61,15 @@ body {
 }
 #lang img.espanol {
 	background:url("../img/flags.png") 0 0;
-	width: 100px;
-	height: 100px;
+	width: 85px;
+	height: 85px;
+	border-radius: 15px;
 }
 #lang img.english {
-	background: url("../img/flags.png") 0 100px;
-	width: 100px;
-	height: 100px;
+	background: url("../img/flags.png") 0 86px;
+	width: 85px;
+	height: 85px;
+	border-radius: 15px;
 }
 .margins .row{
 	margin-left: 0;
