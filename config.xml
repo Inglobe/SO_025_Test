@@ -8,7 +8,7 @@
         Inglobe Team
     </author>
     <content src="index.html" />
-    <preference name="phonegap-version" value="cli-5.1.1" />  
+    <preference name="phonegap-version" value="cli-5.2.0" />  
     <access origin="*" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
