@@ -12,7 +12,7 @@
     <access origin="*" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
-    <gap:plugin name="org.apache.cordova.device" version="1.0.1" />
+    <gap:plugin name="org.apache.cordova.device" version="1.0.2-dev" />
     <gap:plugin name="org.apache.cordova.file" version="3.0.0" />
     <gap:plugin name="org.apache.cordova.file-transfer" version="1.3.0" />
     <gap:plugin name="org.apache.cordova.network-information" version="1.0.1" />
