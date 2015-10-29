@@ -291,7 +291,7 @@ function pantalla_3(parto){
                         '<div class="col-md-6">'+
                           '<div class="input-group input-group-sm" >'+
                             '<span class="input-group-addon">'+lang.id_vaca+'</span>'+
-                            '<input type="number" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" value="'+($.isArray(parto)?parto[0]:'')+'">'+
+                            '<input type="text" onblur="buscar_vaca(this.value)" name="par_vaca" id="par_vaca" class="form-control" placeholder="" value="'+($.isArray(parto)?parto[0]:'')+'">'+
                           '</div>'+
                         '</div>'+
                     '</div>'+
@@ -307,13 +307,13 @@ function pantalla_3(parto){
                     '<div class="col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.lactancia+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia" value="'+($.isArray(parto)?parto[1]:'')+'">'+
+                        '<input type="text" class="form-control" placeholder="" maxlength="2" name="par_lactancia" id="par_lactancia" value="'+($.isArray(parto)?parto[1]:'')+'">'+
                       '</div>'+
                     '</div>'+
                     '<div class="col-md-6">'+
                       '<div class="input-group input-group-sm" >'+
                         '<span class="input-group-addon">'+lang.cc+'</span>'+
-                        '<input type="number" class="form-control" placeholder="" name="par_cc" id="par_cc" value="'+($.isArray(parto)?parto[2]:'')+'">'+
+                        '<input type="text" class="form-control" placeholder="" name="par_cc" id="par_cc" value="'+($.isArray(parto)?parto[2]:'')+'">'+
                       '</div>'+
                     '</div>'+
                 '</div>'+
@@ -588,7 +588,7 @@ function pantalla_5(par_id,becerro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.caravana+'</span>'+
-                                '<input type="number" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" ">'+
+                                '<input type="text" name="bec_caravana" id="bec_caravana" class="form-control" placeholder="" value="'+($.isArray(becerro)?becerro[4]:'')+'" ">'+
                             '</div>'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.tecnico+'</span>'+
@@ -674,7 +674,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.calidad+'</span>'+
-                                '<input id="cal_calidad_1" name="cal_calidad_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][3]:'')+'">'+
+                                '<input id="cal_calidad_1" name="cal_calidad_1" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][3]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -682,7 +682,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad_1" name="cal_cantidad_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][4]:'')+'">'+
+                                '<input id="cal_cantidad_1" name="cal_cantidad_1" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][4]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -690,7 +690,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
-                                '<input id="cal_vigor_1" name="cal_vigor_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][5]:'')+'">'+
+                                '<input id="cal_vigor_1" name="cal_vigor_1" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][5]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -698,7 +698,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
-                                '<input id="cal_peso_1" name="cal_peso_1" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][6]:'')+'">'+
+                                '<input id="cal_peso_1" name="cal_peso_1" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[1])?calostro[1][6]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -766,7 +766,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.calidad+'</span>'+
-                                '<input id="cal_calidad_2" name="cal_calidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][3]:'')+'">'+
+                                '<input id="cal_calidad_2" name="cal_calidad_2" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][3]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -774,7 +774,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.cantidad+'</span>'+
-                                '<input id="cal_cantidad_2" name="cal_cantidad_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][4]:'')+'">'+
+                                '<input id="cal_cantidad_2" name="cal_cantidad_2" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][4]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -782,7 +782,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.vigor+'</span>'+
-                                '<input id="cal_vigor_2" name="cal_vigor_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][5]:'')+'">'+
+                                '<input id="cal_vigor_2" name="cal_vigor_2" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][5]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -790,7 +790,7 @@ function pantalla_6(bec_id,bec_caravana,calostro){
                         '<div class="col-md-12">'+
                             '<div class="input-group input-group-sm" >'+
                                 '<span class="input-group-addon">'+lang.peso_al_nacer+'</span>'+
-                                '<input id="cal_peso_2" name="cal_peso_2" type="number" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][6]:'')+'">'+
+                                '<input id="cal_peso_2" name="cal_peso_2" type="text" class="form-control" placeholder="" value="'+(calostro&&$.isArray(calostro[2])?calostro[2][6]:'')+'">'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
